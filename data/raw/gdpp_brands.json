@@ -1,0 +1,623 @@
+[
+    {
+        "brand_name": "건강백서캣",
+        "category": "헬스케어",
+        "description": "고양이 건강 관리 전문 브랜드. 건강 보조제 및 기능성 제품 제공.",
+        "products": [
+            "건강 보조제",
+            "영양제",
+            "기능성 간식"
+        ],
+        "booth_location": "A구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "미유박스",
+        "category": "용품",
+        "description": "고양이 용품 큐레이션 서비스. 매월 새로운 제품을 선별하여 제공.",
+        "products": [
+            "구독 박스",
+            "장난감",
+            "간식"
+        ],
+        "booth_location": "B구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "알모네이처",
+        "category": "사료/간식",
+        "description": "이탈리아 프리미엄 자연주의 펫푸드 브랜드. 100% 자연 원료 사용.",
+        "products": [
+            "습식 사료",
+            "건식 사료",
+            "간식"
+        ],
+        "booth_location": "C구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "이나바코리아",
+        "category": "간식",
+        "description": "일본 대표 고양이 간식 브랜드. 챠오츄르로 유명.",
+        "products": [
+            "챠오츄르",
+            "츄르",
+            "습식 간식"
+        ],
+        "booth_location": "D구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "조공",
+        "category": "간식",
+        "description": "한국 프리미엄 고양이 간식 브랜드. 국내산 원료 사용.",
+        "products": [
+            "동결건조 간식",
+            "져키",
+            "츄르"
+        ],
+        "booth_location": "E구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "로우즈(RAWZ)",
+        "category": "사료",
+        "description": "미국 프리미엄 자연주의 사료 브랜드. 그레인프리 제품 전문.",
+        "products": [
+            "건식 사료",
+            "습식 사료",
+            "동결건조 사료"
+        ],
+        "booth_location": "F구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "내추럴발란스",
+        "category": "사료",
+        "description": "미국 프리미엄 펫푸드 브랜드. 균형 잡힌 영양 제공.",
+        "products": [
+            "건식 사료",
+            "습식 사료",
+            "간식"
+        ],
+        "booth_location": "G구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "프롬한라",
+        "category": "사료",
+        "description": "한국 프리미엄 펫푸드 브랜드. 국내 생산.",
+        "products": [
+            "건식 사료",
+            "습식 사료"
+        ],
+        "booth_location": "H구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "보레알",
+        "category": "사료",
+        "description": "캐나다 프리미엄 펫푸드 브랜드. 신선한 육류 사용.",
+        "products": [
+            "건식 사료",
+            "습식 사료",
+            "동결건조 사료"
+        ],
+        "booth_location": "I구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "미식냥",
+        "category": "간식",
+        "description": "한국 고양이 간식 브랜드. 다양한 맛과 식감 제공.",
+        "products": [
+            "동결건조 간식",
+            "져키",
+            "츄르"
+        ],
+        "booth_location": "J구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "미야우즈",
+        "category": "간식",
+        "description": "일본 고양이 간식 브랜드. 기호성 높은 제품.",
+        "products": [
+            "츄르",
+            "습식 간식",
+            "스낵"
+        ],
+        "booth_location": "K구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "닥터맘마",
+        "category": "사료/헬스케어",
+        "description": "수의사가 개발한 기능성 펫푸드 브랜드.",
+        "products": [
+            "처방식 사료",
+            "기능성 간식",
+            "영양제"
+        ],
+        "booth_location": "L구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "뉴트리션트리",
+        "category": "사료",
+        "description": "영양학 기반 프리미엄 펫푸드 브랜드.",
+        "products": [
+            "건식 사료",
+            "습식 사료"
+        ],
+        "booth_location": "M구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "노스웨스트내추럴",
+        "category": "사료",
+        "description": "미국 자연주의 펫푸드 브랜드. 동결건조 전문.",
+        "products": [
+            "동결건조 사료",
+            "건식 사료"
+        ],
+        "booth_location": "N구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "블랙우드-코리아",
+        "category": "사료",
+        "description": "미국 프리미엄 펫푸드 브랜드. 전연령 대응.",
+        "products": [
+            "건식 사료",
+            "습식 사료"
+        ],
+        "booth_location": "O구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "펫트코리아",
+        "category": "용품",
+        "description": "고양이 용품 전문 브랜드. 다양한 생활용품 제공.",
+        "products": [
+            "급식기",
+            "급수기",
+            "장난감",
+            "침대"
+        ],
+        "booth_location": "P구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "로마샌드",
+        "category": "모래",
+        "description": "프리미엄 고양이 모래 브랜드. 응고력 우수.",
+        "products": [
+            "벤토나이트 모래",
+            "두부 모래",
+            "펠렛 모래"
+        ],
+        "booth_location": "Q구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "LG유니참펫",
+        "category": "용품/모래",
+        "description": "LG 계열 펫케어 브랜드. 긴노스푼, 데오토일렛 등.",
+        "products": [
+            "화장실",
+            "모래",
+            "탈취제"
+        ],
+        "booth_location": "R구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "머든제작소",
+        "category": "가구",
+        "description": "고양이 가구 전문 브랜드. 캣타워, 캣휠 제작.",
+        "products": [
+            "캣타워",
+            "캣휠",
+            "스크래쳐"
+        ],
+        "booth_location": "S구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "매직카펫",
+        "category": "용품",
+        "description": "고양이 매트 및 침구 전문 브랜드.",
+        "products": [
+            "매트",
+            "침대",
+            "방석"
+        ],
+        "booth_location": "T구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "리쿤이네",
+        "category": "용품",
+        "description": "고양이 생활용품 브랜드. 실용적인 디자인.",
+        "products": [
+            "급식기",
+            "장난감",
+            "캐리어"
+        ],
+        "booth_location": "U구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "누키스트",
+        "category": "용품",
+        "description": "고양이 용품 브랜드. 감각적인 디자인.",
+        "products": [
+            "급식기",
+            "급수기",
+            "장난감"
+        ],
+        "booth_location": "V구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "냥템점",
+        "category": "용품",
+        "description": "고양이 아이템 전문 쇼핑몰. 다양한 제품 큐레이션.",
+        "products": [
+            "장난감",
+            "간식",
+            "용품"
+        ],
+        "booth_location": "W구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "봄고양이마을",
+        "category": "용품/아트",
+        "description": "고양이 테마 제품 브랜드. 감성적인 디자인.",
+        "products": [
+            "장난감",
+            "소품",
+            "아트 상품"
+        ],
+        "booth_location": "X구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "RGU 원목 캣타워",
+        "category": "가구",
+        "description": "원목 캣타워 전문 브랜드. 고급스러운 디자인.",
+        "products": [
+            "원목 캣타워",
+            "스크래쳐",
+            "선반"
+        ],
+        "booth_location": "Y구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "두잇",
+        "category": "용품",
+        "description": "고양이 DIY 용품 브랜드.",
+        "products": [
+            "조립식 가구",
+            "장난감",
+            "스크래쳐"
+        ],
+        "booth_location": "Z구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "디팡",
+        "category": "용품",
+        "description": "고양이 생활용품 브랜드.",
+        "products": [
+            "급식기",
+            "급수기",
+            "장난감"
+        ],
+        "booth_location": "AA구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "닥터뮨(dr.mune)",
+        "category": "헬스케어",
+        "description": "수의사 개발 고양이 건강 관리 제품.",
+        "products": [
+            "영양제",
+            "건강 보조제",
+            "기능성 간식"
+        ],
+        "booth_location": "AB구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "닥터페트라",
+        "category": "헬스케어",
+        "description": "펫 헬스케어 전문 브랜드.",
+        "products": [
+            "영양제",
+            "건강 보조제",
+            "처방식 사료"
+        ],
+        "booth_location": "AC구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "메디코펫",
+        "category": "헬스케어",
+        "description": "의료용 펫케어 제품 브랜드.",
+        "products": [
+            "의료용품",
+            "영양제",
+            "건강 보조제"
+        ],
+        "booth_location": "AD구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "루미펫",
+        "category": "헬스케어",
+        "description": "고양이 건강 관리 전문 브랜드.",
+        "products": [
+            "영양제",
+            "건강 보조제"
+        ],
+        "booth_location": "AE구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "매직코코",
+        "category": "용품",
+        "description": "고양이 생활용품 브랜드.",
+        "products": [
+            "급식기",
+            "장난감",
+            "침구"
+        ],
+        "booth_location": "AF구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "블랭크캣",
+        "category": "아트",
+        "description": "고양이 아트 상품 브랜드. 감각적인 디자인.",
+        "products": [
+            "포스터",
+            "엽서",
+            "스티커",
+            "굿즈"
+        ],
+        "booth_location": "AG구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "아이네블루메",
+        "category": "아트",
+        "description": "고양이 테마 아트 상품 브랜드.",
+        "products": [
+            "일러스트",
+            "포스터",
+            "굿즈"
+        ],
+        "booth_location": "AH구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "고마워우리 포토그라피",
+        "category": "아트",
+        "description": "고양이 사진 촬영 및 아트 상품.",
+        "products": [
+            "사진 촬영",
+            "포토북",
+            "액자"
+        ],
+        "booth_location": "AI구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "땐냥꽁냥의 세라스튜디오",
+        "category": "아트",
+        "description": "고양이 도자기 및 세라믹 제품.",
+        "products": [
+            "도자기",
+            "세라믹 그릇",
+            "장식품"
+        ],
+        "booth_location": "AJ구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "냠냠스튜디오",
+        "category": "아트",
+        "description": "고양이 테마 아트 상품 브랜드.",
+        "products": [
+            "일러스트",
+            "굿즈",
+            "스티커"
+        ],
+        "booth_location": "AK구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "도혜드로잉",
+        "category": "아트",
+        "description": "고양이 드로잉 및 일러스트 상품.",
+        "products": [
+            "드로잉",
+            "포스터",
+            "엽서"
+        ],
+        "booth_location": "AL구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "블랭크데이",
+        "category": "아트",
+        "description": "고양이 테마 디자인 상품.",
+        "products": [
+            "포스터",
+            "굿즈",
+            "문구"
+        ],
+        "booth_location": "AM구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "묘마카세",
+        "category": "아트",
+        "description": "고양이 테마 아트 상품 브랜드.",
+        "products": [
+            "일러스트",
+            "굿즈",
+            "액세서리"
+        ],
+        "booth_location": "AN구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "그림휴공방",
+        "category": "아트",
+        "description": "고양이 테마 수공예 상품.",
+        "products": [
+            "수공예품",
+            "액세서리",
+            "소품"
+        ],
+        "booth_location": "AO구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "스튜디오 니모",
+        "category": "아트",
+        "description": "고양이 테마 디자인 스튜디오.",
+        "products": [
+            "일러스트",
+            "포스터",
+            "굿즈"
+        ],
+        "booth_location": "AP구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "스튜디오얼라이브",
+        "category": "아트",
+        "description": "고양이 테마 아트 상품 브랜드.",
+        "products": [
+            "일러스트",
+            "굿즈",
+            "문구"
+        ],
+        "booth_location": "AQ구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "멜린 스튜디오",
+        "category": "아트",
+        "description": "고양이 테마 디자인 상품.",
+        "products": [
+            "일러스트",
+            "포스터",
+            "굿즈"
+        ],
+        "booth_location": "AR구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "만화가네똥고양이",
+        "category": "아트",
+        "description": "고양이 만화 및 일러스트 상품.",
+        "products": [
+            "만화책",
+            "굿즈",
+            "스티커"
+        ],
+        "booth_location": "AS구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "강집사",
+        "category": "용품",
+        "description": "고양이 생활용품 브랜드.",
+        "products": [
+            "급식기",
+            "장난감",
+            "용품"
+        ],
+        "booth_location": "AT구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "따스넉",
+        "category": "용품",
+        "description": "고양이 침구 및 보온 용품 전문.",
+        "products": [
+            "침대",
+            "방석",
+            "보온 용품"
+        ],
+        "booth_location": "AU구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "아끼묘",
+        "category": "용품",
+        "description": "고양이 생활용품 브랜드.",
+        "products": [
+            "급식기",
+            "장난감",
+            "용품"
+        ],
+        "booth_location": "AV구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "고양장점",
+        "category": "용품",
+        "description": "고양이 용품 전문 브랜드.",
+        "products": [
+            "장난감",
+            "용품",
+            "간식"
+        ],
+        "booth_location": "AW구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "캣트럴파크",
+        "category": "용품",
+        "description": "고양이 생활용품 브랜드.",
+        "products": [
+            "장난감",
+            "용품",
+            "침구"
+        ],
+        "booth_location": "AX구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "엘 아미고(EL AMIGO)",
+        "category": "용품",
+        "description": "고양이 용품 브랜드.",
+        "products": [
+            "급식기",
+            "장난감",
+            "용품"
+        ],
+        "booth_location": "AY구역",
+        "source_url": "https://gdppcat.com/brand"
+    },
+    {
+        "brand_name": "영희네 잡화점",
+        "category": "용품",
+        "description": "고양이 잡화 및 소품 전문.",
+        "products": [
+            "소품",
+            "장난감",
+            "용품"
+        ],
+        "booth_location": "AZ구역",
+        "source_url": "https://gdppcat.com/brand"
+    }
+]

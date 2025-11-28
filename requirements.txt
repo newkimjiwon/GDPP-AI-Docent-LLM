@@ -1,0 +1,38 @@
+# Core Dependencies
+python-dotenv==1.0.0
+
+# Data Collection
+selenium==4.25.0
+beautifulsoup4==4.12.3
+webdriver-manager==4.0.0
+requests==2.31.0
+wikipedia-api==0.6.0
+
+# Data Processing
+pandas==2.2.0
+numpy==1.26.0
+
+# LLM & Serving (will be installed separately due to size)
+# vllm==0.6.0
+# transformers==4.44.0
+# torch==2.4.0
+
+# RAG & Vector DB
+langchain==0.3.0
+langchain-community==0.3.0
+chromadb==0.5.0
+sentence-transformers==3.0.0
+
+# Search
+rank-bm25==0.2.2
+
+# Backend
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+python-multipart==0.0.9
+sse-starlette==2.1.0
+
+# Utilities
+tqdm==4.66.0
+pydantic==2.9.0
+pydantic-settings==2.5.0
