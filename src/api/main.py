@@ -4,13 +4,14 @@ FastAPI 메인 애플리케이션
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import chat
+from .routes import chat, auth, folders, conversations
+from src.database.db import init_db
 
 # FastAPI 앱 생성
 app = FastAPI(
     title="GDPP AI Docent API",
     description="궁디팡팡 캣페스타 AI 도슨트 API",
-    version="1.0.0"
+    version="2.0.0"
 )
 
 # CORS 설정
@@ -22,7 +23,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# 데이터베이스 초기화
+@app.on_event("startup")
+async def startup_event():
+    """앱 시작 시 데이터베이스 초기화"""
+    init_db()
+    print("[INFO] 데이터베이스 초기화 완료")
+
 # 라우터 등록
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+app.include_router(folders.router, prefix="/api/folders", tags=["folders"])
+app.include_router(conversations.router, prefix="/api/conversations", tags=["conversations"])
 app.include_router(chat.router, prefix="/api", tags=["chat"])
 
 
@@ -31,7 +42,7 @@ async def root():
     """루트 엔드포인트"""
     return {
         "message": "GDPP AI Docent API",
-        "version": "1.0.0",
+        "version": "2.0.0",
         "status": "running"
     }
 
