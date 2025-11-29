@@ -34,14 +34,10 @@ venv.bak/
 htmlcov/
 .tox/
 
-# Project Specific - Vector Database (재생성 가능)
-data/vectordb/
-
-# Project Specific - Models (용량이 큰 LLM 모델 파일)
+# Project Specific - LLM Models (용량이 큰 파일만)
 *.gguf
 *.bin
 *.safetensors
-models/
 .ollama/
 
 # Project Specific - Logs
@@ -71,3 +67,4 @@ desktop.ini
 # data/raw/wikipedia_cat_knowledge.json - Wikipedia 데이터
 # data/raw/gdpp_brands.json - GDPP 브랜드 데이터
 # data/processed/all_chunks.json - 전처리된 청크 데이터
+app/

@@ -44,26 +44,37 @@ python -m uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8000
 
 서버가 시작되면: http://localhost:8000
 
-### 4. 프론트엔드 실행
+### 4. React 프론트엔드 실행
 
 새 터미널에서:
 
 ```bash
-# conda 환경 활성화
-conda activate gdpp
+# Node.js 20 환경 설정 (nvm 사용)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm use 20
 
-# Streamlit 앱 실행
-cd /mnt/d/Project/GDDPAIDocent
-streamlit run app/streamlit_app.py
+# React 앱 실행
+cd /mnt/d/Project/GDDPAIDocent/frontend
+npm run dev
 ```
 
-앱이 자동으로 브라우저에서 열립니다: http://localhost:8501
+React 앱이 실행됩니다: http://localhost:5173
+
+**React 프론트엔드 기능**
+- 게스트 모드: 로그인 없이 바로 채팅 가능
+- 로그인/회원가입: 대화 히스토리 저장
+- 대화 관리: 폴더로 대화 정리
+- 상품 URL 저장: 오른쪽 패널에서 관심 상품 URL 보관
+- ChatGPT 스타일 UI: 현대적이고 직관적인 인터페이스
+
 
 ## 사용 방법
 
-1. **API 상태 확인**: 사이드바에서 "API 상태 확인" 버튼 클릭
+1. **게스트로 시작**: 로그인 없이 바로 채팅 가능
 2. **질문 입력**: 메시지 입력창에 질문 입력
-3. **추천 질문**: 오른쪽 사이드바의 추천 질문 클릭
+3. **로그인**: 대화를 저장하려면 "로그인하여 저장" 버튼 클릭
+4. **상품 저장**: 오른쪽 패널에서 관심 상품 URL 저장
 
 ## 예시 질문
 

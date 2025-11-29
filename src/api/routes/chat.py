@@ -62,7 +62,7 @@ class ChatRequest(BaseModel):
     """채팅 요청 모델"""
     message: str
     temperature: Optional[float] = 0.7
-    max_tokens: Optional[int] = 512
+    max_tokens: Optional[int] = 2048
     top_k: Optional[int] = 5
 
 

@@ -104,38 +104,38 @@ with st.sidebar:
     st.header("⚙️ 설정")
     
     # API 상태 확인
-    if st.button("🔄 API 상태 확인"):
+    if st.button("API 상태 확인"):
         is_available, status_data = check_api_status()
         st.session_state.api_available = is_available
         
         if is_available:
-            st.success("✅ API 서버 연결됨")
+            st.success("API 서버 연결됨")
             
             # 상태 정보 표시
             if status_data:
                 st.json(status_data)
         else:
-            st.error("❌ API 서버에 연결할 수 없습니다")
+            st.error("API 서버에 연결할 수 없습니다")
             st.info("백엔드 서버를 시작하세요:\n```bash\ncd /mnt/d/Project/GDDPAIDocent\npython -m uvicorn src.api.main:app --reload\n```")
     
     st.markdown("---")
     
     # 파라미터 설정
-    st.subheader("🎛️ 파라미터")
+    st.subheader("파라미터")
     temperature = st.slider("Temperature", 0.0, 1.0, 0.7, 0.1)
     top_k = st.slider("검색 결과 수 (Top K)", 1, 10, 5, 1)
     
     st.markdown("---")
     
     # 대화 초기화
-    if st.button("🗑️ 대화 초기화"):
+    if st.button("대화 초기화"):
         st.session_state.messages = []
         st.rerun()
     
     st.markdown("---")
     
     # 정보
-    st.subheader("ℹ️ 정보")
+    st.subheader("정보")
     st.markdown("""
     **궁디팡팡 AI 도슨트**는 캣페스타 방문객을 위한 AI 안내 챗봇입니다.
     
@@ -186,7 +186,7 @@ with col1:
             placeholder="예: 고양이 사료 추천해줘"
         )
         
-        submit_button = st.form_submit_button("전송 📤")
+        submit_button = st.form_submit_button("전송")
     
     if submit_button and user_input:
         # 사용자 메시지 추가
@@ -210,7 +210,7 @@ with col1:
         st.rerun()
 
 with col2:
-    st.subheader("📊 통계")
+    st.subheader("통계")
     
     # 대화 통계
     total_messages = len(st.session_state.messages)

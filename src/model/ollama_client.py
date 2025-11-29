@@ -43,7 +43,7 @@ class OllamaClient:
         prompt: str,
         system: Optional[str] = None,
         temperature: float = 0.7,
-        max_tokens: int = 512
+        max_tokens: int = 2048
     ) -> str:
         """
         텍스트 생성 (비스트리밍)
@@ -137,7 +137,7 @@ class OllamaClient:
         self,
         messages: List[Dict[str, str]],
         temperature: float = 0.7,
-        max_tokens: int = 512
+        max_tokens: int = 2048
     ) -> str:
         """
         채팅 형식으로 텍스트 생성

@@ -21,7 +21,7 @@
 - [성능 및 최적화](#성능-및-최적화)
 - [향후 개선 계획](#향후-개선-계획)
 
----
+
 
 ## 프로젝트 개요
 
@@ -35,7 +35,7 @@
 - **한국어 최적화**: Ko-SBERT 임베딩 및 한국어 LLM 활용
 - **실시간 응답**: Streamlit 기반 인터랙티브 UI
 
----
+
 
 ## 주요 기능
 
@@ -54,77 +54,104 @@
 - 문맥을 고려한 응답 생성
 - 출처 표시로 신뢰성 확보
 
----
+
 
 ## 시스템 아키텍처
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        사용자 (User)                          │
+│                        사용자 (User)                        │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                  Streamlit Frontend (UI)                      │
-│                    http://localhost:8501                      │
+│              React Frontend (Vite + Tailwind)               │
+│                    http://localhost:5173                    │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │  • 게스트 모드 (로그인 없이 채팅)                       │  │
+│  │  • JWT 인증 (로그인/회원가입)                          │  │
+│  │  • 대화 히스토리 관리                                  │  │
+│  │  • 상품 URL 저장                                       │  │
+│  └───────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                  FastAPI Backend (API)                        │
-│                    http://localhost:8000                      │
+│                  FastAPI Backend (API)                      │
+│                    http://localhost:8000                    │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │            Hybrid Retriever                          │    │
-│  │  ┌──────────────────┐  ┌──────────────────┐        │    │
-│  │  │ Dense Vector     │  │ Sparse BM25      │        │    │
-│  │  │ Search           │  │ Search           │        │    │
-│  │  │ (Ko-SBERT)       │  │ (Keyword)        │        │    │
-│  │  └──────────────────┘  └──────────────────┘        │    │
-│  │            │                    │                    │    │
-│  │            └────────┬───────────┘                    │    │
-│  │                     ▼                                │    │
-│  │            Ensemble Results                          │    │
+│  │  Authentication (JWT + bcrypt)                      │    │
+│  │  • /api/auth/register                               │    │
+│  │  • /api/auth/login                                  │    │
+│  │  • /api/auth/me                                     │    │
+│  └─────────────────────────────────────────────────────┘    │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  Conversation Management (SQLite)                   │    │
+│  │  • /api/folders/                                    │    │
+│  │  • /api/conversations/                              │    │
+│  └─────────────────────────────────────────────────────┘    │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │            Hybrid Retriever                         │    │
+│  │  ┌──────────────────┐  ┌──────────────────┐         │    │
+│  │  │ Dense Vector     │  │ Sparse BM25      │         │    │
+│  │  │ Search           │  │ Search           │         │    │
+│  │  │ (Ko-SBERT)       │  │ (Keyword)        │         │    │
+│  │  └──────────────────┘  └──────────────────┘         │    │
+│  │            │                    │                   │    │
+│  │            └────────┬───────────┘                   │    │
+│  │                     ▼                               │    │
+│  │            Ensemble Results                         │    │
 │  └─────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
                               │
-                ┌─────────────┴─────────────┐
-                ▼                           ▼
-┌──────────────────────────┐  ┌──────────────────────────┐
-│   ChromaDB Vector Store  │  │   Ollama LLM Server      │
-│   (64 chunks, 768-dim)   │  │   (Llama 3.1:8b)         │
-│   http://localhost:6333  │  │   http://localhost:11434 │
-└──────────────────────────┘  └──────────────────────────┘
+                ┌─────────────┼─────────────┐
+                ▼             ▼             ▼
+┌──────────────────┐ ┌──────────────┐ ┌──────────────────┐
+│  SQLite Database │ │  ChromaDB    │ │  Ollama LLM      │
+│  (User, Conv)    │ │  Vector DB   │ │  Server          │
+│  ./data/gdpp.db  │ │  (64 chunks) │ │  localhost:11434 │
+└──────────────────┘ └──────────────┘ └──────────────────┘
 ```
 
 ### 데이터 플로우
 
-1. **사용자 질문** → Streamlit UI
-2. **검색 단계**:
-   - Ko-SBERT로 질문 임베딩
-   - ChromaDB에서 유사 벡터 검색 (Dense)
-   - BM25로 키워드 검색 (Sparse)
-   - 두 결과를 앙상블 (Hybrid Search)
-3. **생성 단계**:
-   - 검색된 문서를 컨텍스트로 프롬프트 구성
-   - Ollama LLM에 전달
+1. **사용자 입력** → React UI에서 메시지 입력
+2. **검색 단계** → FastAPI가 Hybrid Retriever로 관련 문서 검색
+   - Dense Vector Search (의미 기반)
+   - Sparse BM25 Search (키워드 기반)
+   - 두 결과를 앙상블하여 최종 컨텍스트 생성
+3. **생성 단계** → Ollama LLM이 컨텍스트 기반으로 응답 생성
    - 한국어 응답 생성
-4. **응답 표시** → Streamlit UI에 출력 (출처 포함)
+4. **응답 표시** → React UI에 출력 (출처 포함)
+5. **대화 저장** → 로그인 사용자의 경우 SQLite에 저장
 
----
+
 
 ## 기술 스택
 
-### Core Framework
+### Frontend
+- **React 18**: 사용자 인터페이스 라이브러리
+- **Vite 5**: 빌드 도구 및 개발 서버
+- **Tailwind CSS 3**: 유틸리티 기반 CSS 프레임워크
+- **Zustand**: 경량 상태 관리 라이브러리
+- **Axios**: HTTP 클라이언트
+- **React Router**: 클라이언트 사이드 라우팅
+
+### Backend
 - **Python 3.10**: 메인 프로그래밍 언어
 - **FastAPI**: 백엔드 API 서버
-- **Streamlit**: 프론트엔드 UI
 - **Ollama**: 로컬 LLM 서빙
+
+### Authentication & Database
+- **SQLite**: 경량 관계형 데이터베이스
+- **SQLAlchemy**: Python ORM
+- **JWT (PyJWT)**: JSON Web Token 인증
+- **bcrypt**: 비밀번호 해싱
 
 ### RAG System
 - **Ko-SBERT** (`jhgan/ko-sbert-nli`): 한국어 임베딩 모델 (768차원)
 - **ChromaDB**: 벡터 데이터베이스
 - **BM25**: 키워드 기반 검색
-- **LangChain**: RAG 파이프라인 구성
 
 ### LLM
 - **Llama 3.1:8b**: Meta의 오픈소스 LLM (4.9GB)
@@ -141,7 +168,6 @@
 - **Git**: 버전 관리
 - **WSL2**: 개발 환경 (Ubuntu on Windows)
 
----
 
 ## 설치 및 실행
 
@@ -171,7 +197,12 @@ git clone <repository-url>
 cd GDDPAIDocent
 
 # 의존성 설치
+# 의존성 설치
 pip install -r requirements.txt
+
+# 환경 변수 설정
+cp .env.example .env
+# .env 파일을 열어 JWT_SECRET_KEY 등을 수정하세요.
 ```
 
 ### 2. Ollama 설치 및 모델 다운로드
@@ -217,29 +248,55 @@ cd /path/to/GDDPAIDocent
 python -m uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-**터미널 2: 프론트엔드**
+**터미널 2: React 프론트엔드**
 ```bash
-conda activate gdpp
-cd /path/to/GDDPAIDocent
-streamlit run app/streamlit_app.py
+# Node.js 20 환경 설정 (nvm 사용)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm use 20
+
+# React 앱 실행
+cd /path/to/GDDPAIDocent/frontend
+npm install  # 의존성 설치 (최초 1회)
+npm run dev
 ```
 
 ### 5. 접속
 
-- **프론트엔드**: http://localhost:8501 (자동으로 브라우저 열림)
+- **React 프론트엔드**: http://localhost:5173
 - **백엔드 API**: http://localhost:8000
 - **API 문서**: http://localhost:8000/docs
 
----
+
 
 ## 사용 방법
 
 ### 웹 UI 사용
 
-1. **브라우저에서 접속**: http://localhost:8501
-2. **API 상태 확인**: 왼쪽 사이드바에서 "API 상태 확인" 클릭
+1. **브라우저에서 접속**: http://localhost:5173
+2. **게스트 모드로 시작**: 로그인 없이 바로 채팅 가능
 3. **질문 입력**: 하단 입력창에 질문 입력
-4. **추천 질문 사용**: 오른쪽 사이드바의 추천 질문 버튼 클릭
+4. **로그인**: 대화를 저장하려면 "로그인하여 저장" 버튼 클릭
+5. **회원가입**: 새 계정 만들기
+6. **대화 관리**: 왼쪽 사이드바에서 대화 목록 확인
+7. **상품 저장**: 오른쪽 패널에서 관심 상품 URL 저장
+
+### 주요 기능
+
+**게스트 모드**
+- 로그인 없이 즉시 채팅 가능
+- 대화 내용은 임시로만 저장 (새로고침 시 사라짐)
+
+**로그인 사용자**
+- 대화 히스토리 자동 저장
+- 폴더로 대화 정리
+- 대화 제목 수정
+- 대화 삭제
+
+**상품 URL 관리**
+- 제목과 URL 함께 저장
+- 저장된 상품 수정/삭제
+- 클릭하여 새 탭에서 열기
 
 ### 예시 질문
 
@@ -270,7 +327,7 @@ curl -X POST "http://localhost:8000/api/chat" \
 curl "http://localhost:8000/api/status"
 ```
 
----
+
 
 ## 프로젝트 구조
 
@@ -311,14 +368,14 @@ GDDPAIDocent/
 └── README.md                      # 프로젝트 문서 (본 파일)
 ```
 
----
+
 
 ## 데이터 현황
 
 ### 수집된 데이터
 
 | 데이터 소스 | 항목 수 | 총 크기 | 설명 |
-|------------|--------|---------|------|
+||--|||
 | Wikipedia | 12 페이지 | 27,081자 | 고양이 관련 지식 |
 | GDPP 브랜드 | 52 브랜드 | - | 캣페스타 참가 브랜드 |
 | **총 청크** | **64개** | **31,173자** | **전처리 완료** |
@@ -337,7 +394,7 @@ GDDPAIDocent/
 - **평균 청크 길이**: 487자
 - **검색 방식**: Hybrid (Vector 70% + BM25 30%)
 
----
+
 
 ## 개발 과정
 
@@ -376,7 +433,7 @@ GDDPAIDocent/
 - 추천 질문 기능
 - 출처 표시 기능
 
----
+
 
 ## 성능 및 최적화
 
@@ -395,7 +452,7 @@ GDDPAIDocent/
 - **배치 처리**: 벡터 DB 구축 시 배치 크기 32
 - **프롬프트 최적화**: 컨텍스트 길이 제한 (512 토큰)
 
----
+
 
 ## 향후 개선 계획
 
@@ -417,21 +474,14 @@ GDDPAIDocent/
 - 사용자 피드백 수집 시스템
 - A/B 테스트 프레임워크
 
----
-
-## 라이선스
-
-이 프로젝트는 교육 목적으로 개발되었습니다.
-
----
 
 ## 개발자
 
-- **개발자**: [Your Name]
-- **프로젝트 기간**: 2024.11.28 - 2024.11.29
-- **연락처**: [Your Email]
+- **개발자**: 김지원
+- **프로젝트 기간**: 2025.11.28 - 2025.12.05
+- **연락처**: [newkimjiwon@gmail.com]
 
----
+
 
 ## 감사의 말
 
@@ -441,7 +491,7 @@ GDDPAIDocent/
 - **Hugging Face**: 한국어 모델 커뮤니티
 - **궁디팡팡 캣페스타**: 프로젝트 주제 제공
 
----
+
 
 ## 참고 자료
 
@@ -451,6 +501,6 @@ GDDPAIDocent/
 - [LangChain Documentation](https://python.langchain.com/)
 - [ChromaDB Documentation](https://docs.trychroma.com/)
 
----
+
 
 **Made with Love for Cat Lovers**
