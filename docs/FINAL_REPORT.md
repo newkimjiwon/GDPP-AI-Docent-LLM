@@ -234,9 +234,9 @@ from .embedder import KoSBERTEmbedder
 
 ### 문제 3: Ollama 모델 이름 불일치
 **문제:**
-- 코드에서 `eeve-korean-10.8b:latest` 사용
-- 실제 다운로드한 모델은 `llama3.1:8b`
-- LLM 응답 생성 실패
+- 코드에서 `llama3.1:8b` 사용
+- 문서에서 다른 모델명 언급
+- 일관성 부족
 
 **해결:**
 ```python

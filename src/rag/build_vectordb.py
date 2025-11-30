@@ -10,8 +10,8 @@ from vector_store import VectorStore
 
 
 def build_vector_database(
-    chunks_file: str = "/mnt/d/Project/GDDPAIDocent/data/processed/all_chunks.json",
-    persist_directory: str = "/mnt/d/Project/GDDPAIDocent/data/vectordb",
+    chunks_file: str = "./data/processed/all_chunks.json",
+    persist_directory: str = "./data/vectordb",
     collection_name: str = "gdpp_knowledge"
 ):
     """
