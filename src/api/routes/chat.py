@@ -39,7 +39,7 @@ def initialize_components():
     if vector_store is None:
         print("[INFO] 벡터 스토어 초기화 중...")
         vector_store = VectorStore(
-            persist_directory="/mnt/d/Project/GDDPAIDocent/data/vectordb",
+            persist_directory="./data/vectordb",
             collection_name="gdpp_knowledge"
         )
     
@@ -122,7 +122,9 @@ async def chat(request: ChatRequest):
         )
         
     except Exception as e:
+        import traceback
         print(f"[ERROR] {str(e)}")
+        print(f"[TRACEBACK] {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

@@ -17,7 +17,7 @@ class HybridRetriever:
         self,
         vector_store: VectorStore,
         embedder: KoSBERTEmbedder,
-        chunks_file: str = "/mnt/d/Project/GDDPAIDocent/data/processed/all_chunks.json"
+        chunks_file: str = "./data/processed/all_chunks.json"
     ):
         """
         Args:
@@ -168,7 +168,7 @@ if __name__ == "__main__":
     # 초기화
     embedder = KoSBERTEmbedder()
     vector_store = VectorStore(
-        persist_directory="/mnt/d/Project/GDDPAIDocent/data/vectordb",
+        persist_directory="./data/vectordb",
         collection_name="gdpp_knowledge"
     )
     
