@@ -28,19 +28,6 @@ export default function ChatArea() {
 
     return (
         <div className="h-full flex flex-col">
-            {/* Header */}
-            <div className="bg-white border-b border-gray-200 p-4 flex-shrink-0">
-                <div className="flex items-center justify-start px-16">
-                    <h2 className="text-lg font-semibold text-gray-800">
-                        🐱 궁디팡팡 AI 도슨트
-                    </h2>
-                    {!isAuthenticated && (
-                        <span className="text-sm text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full ml-3">
-                            게스트 모드
-                        </span>
-                    )}
-                </div>
-            </div>
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
