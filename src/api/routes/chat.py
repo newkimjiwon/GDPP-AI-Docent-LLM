@@ -2,10 +2,12 @@
 """
 챗봇 API 라우트
 """
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Optional
+from sqlalchemy.orm import Session
+from datetime import datetime
 import sys
 import os
 
@@ -17,6 +19,11 @@ from src.rag.vector_store import VectorStore
 from src.rag.hybrid_retriever import HybridRetriever
 from src.model.ollama_client import OllamaClient
 from src.model.prompt_template import create_chat_prompt
+from src.database.db import get_db
+from src.models.conversation import Conversation
+from src.models.message import Message
+from src.models.user import User
+from src.api.routes.auth import get_current_user_optional
 
 
 router = APIRouter()
@@ -61,6 +68,7 @@ def initialize_components():
 class ChatRequest(BaseModel):
     """채팅 요청 모델"""
     message: str
+    conversation_id: Optional[int] = None  # 로그인 사용자의 대화 ID
     temperature: Optional[float] = 0.7
     max_tokens: Optional[int] = 2048
     top_k: Optional[int] = 5
@@ -73,12 +81,18 @@ class ChatResponse(BaseModel):
 
 
 @router.post("/chat")
-async def chat(request: ChatRequest):
+async def chat(
+    request: ChatRequest,
+    current_user: Optional[User] = Depends(get_current_user_optional),
+    db: Session = Depends(get_db)
+):
     """
     챗봇 엔드포인트 (비스트리밍)
     
     Args:
         request: 채팅 요청
+        current_user: 현재 사용자 (선택적)
+        db: 데이터베이스 세션
         
     Returns:
         ChatResponse: 챗봇 응답
@@ -115,6 +129,43 @@ async def chat(request: ChatRequest):
                 "title": metadata.get('brand_name') or metadata.get('title', ''),
                 "score": result.get('hybrid_score', 0)
             })
+        
+        # 5. 로그인 사용자의 경우 메시지 저장
+        if current_user and request.conversation_id:
+            print(f"[INFO] 메시지 저장 중... (conversation_id: {request.conversation_id})")
+            
+            # 대화 존재 확인
+            conversation = db.query(Conversation).filter(
+                Conversation.id == request.conversation_id,
+                Conversation.user_id == current_user.id
+            ).first()
+            
+            if conversation:
+                # 사용자 메시지 저장
+                user_message = Message(
+                    conversation_id=request.conversation_id,
+                    role="user",
+                    content=request.message,
+                    sources=None
+                )
+                db.add(user_message)
+                
+                # AI 응답 저장
+                assistant_message = Message(
+                    conversation_id=request.conversation_id,
+                    role="assistant",
+                    content=response,
+                    sources={"sources": sources}
+                )
+                db.add(assistant_message)
+                
+                # 대화 updated_at 갱신
+                conversation.updated_at = datetime.utcnow()
+                
+                db.commit()
+                print("[INFO] 메시지 저장 완료")
+            else:
+                print(f"[WARNING] 대화를 찾을 수 없음: {request.conversation_id}")
         
         return ChatResponse(
             response=response,

@@ -84,8 +84,32 @@ const useChatStore = create((set, get) => ({
             set((state) => ({
                 messages: [...state.messages, assistantMessage],
             }));
+
+            // 로그인 사용자의 경우 메시지가 백엔드에서 자동 저장됨
+            // (chat.py에서 conversation_id가 있으면 자동으로 DB에 저장)
         } catch (error) {
             set({ error: error.message });
+        }
+    },
+
+    updateConversation: async (conversationId, title) => {
+        try {
+            const response = await api.put(`/conversations/${conversationId}`, { title });
+            
+            set((state) => ({
+                conversations: state.conversations.map((conv) =>
+                    conv.id === conversationId ? { ...conv, title } : conv
+                ),
+                currentConversation:
+                    state.currentConversation?.id === conversationId
+                        ? { ...state.currentConversation, title }
+                        : state.currentConversation,
+            }));
+            
+            return response.data;
+        } catch (error) {
+            set({ error: error.message });
+            return null;
         }
     },
 

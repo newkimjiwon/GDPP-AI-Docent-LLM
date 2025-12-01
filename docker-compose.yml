@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # 백엔드 (FastAPI)
+  backend:
+    build: .
+    container_name: gdpp-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - DATABASE_URL=sqlite:///./data/gdpp.db
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-secret-key-change-this}
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      ollama:
+        condition: service_healthy
+    networks:
+      - gdpp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 프론트엔드 (React + Nginx)
+  frontend:
+    build: ./frontend
+    container_name: gdpp-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - gdpp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  # Ollama LLM 서버
+  ollama:
+    image: ollama/ollama:latest
+    container_name: gdpp-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - gdpp-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  gdpp-network:
+    driver: bridge
+
+volumes:
+  ollama_data:
+    driver: local

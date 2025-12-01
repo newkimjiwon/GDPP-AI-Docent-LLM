@@ -118,6 +118,34 @@ async def get_current_user(
     return user
 
 
+# 선택적 인증 (게스트도 허용)
+async def get_current_user_optional(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(HTTPBearer(auto_error=False)),
+    db: Session = Depends(get_db)
+) -> Optional[User]:
+    """JWT 토큰에서 현재 사용자 가져오기 (선택적)"""
+    if credentials is None:
+        return None
+    
+    token = credentials.credentials
+    payload = verify_token(token)
+    
+    if payload is None:
+        return None
+    
+    user_id_str = payload.get("sub")
+    if user_id_str is None:
+        return None
+    
+    try:
+        user_id = int(user_id_str)
+    except (ValueError, TypeError):
+        return None
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    return user
+
+
 # 관리자 권한 확인 (의존성)
 async def get_current_admin_user(
     current_user: User = Depends(get_current_user)

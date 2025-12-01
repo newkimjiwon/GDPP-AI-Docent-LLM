@@ -55,6 +55,7 @@ tmp/
 
 # Project Specific - Vector Database (환경마다 재생성 필요)
 data/vectordb/
+data/gdpp.db
 
 # OS
 .DS_Store
