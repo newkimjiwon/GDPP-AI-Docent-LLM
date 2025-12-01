@@ -16,10 +16,8 @@ curl -fsSL https://ollama.com/install.sh | sh
 # Ollama 서비스 시작
 ollama serve
 
-# 새 터미널에서 모델 다운로드
-ollama pull eeve-korean-10.8b:latest
-# 또는
-ollama pull qwen2.5:7b
+# 새 터미널에서 모델 다운로드 (약 4.9GB)
+ollama pull llama3.1:8b
 ```
 
 ### 2. Python 환경 설정
@@ -101,7 +99,7 @@ ollama serve
 - 포트 8000이 사용 가능한지 확인
 
 ### GPU 메모리 부족
-- 더 작은 모델 사용: `ollama pull qwen2.5:7b`
+- 더 작은 모델 사용: `ollama pull llama3.2:3b`
 - 다른 GPU 프로세스 종료
 
 ## 아키텍처

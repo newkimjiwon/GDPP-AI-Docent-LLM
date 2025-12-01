@@ -41,9 +41,7 @@ ollama --version
 nvidia-smi
 
 # 모델 다운로드 (한국어 모델)
-ollama pull eeve-korean-10.8b:latest
-# 또는 더 작은 모델
-ollama pull qwen2.5:7b
+ollama pull llama3.1:8b
 ```
 
 ## 다음 단계

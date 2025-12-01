@@ -53,6 +53,9 @@ tmp/
 .cache/
 .ruff_cache/
 
+# Project Specific - Vector Database (환경마다 재생성 필요)
+data/vectordb/
+
 # OS
 .DS_Store
 Thumbs.db
