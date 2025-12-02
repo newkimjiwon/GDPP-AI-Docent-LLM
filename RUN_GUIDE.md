@@ -7,6 +7,8 @@
 
 ## 설치 및 실행
 
+> **서버 배포 (Docker)**: [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)를 참고하세요.
+
 ### 1. Ollama 설치 및 모델 다운로드
 
 ```bash
@@ -105,7 +107,7 @@ ollama serve
 ## 아키텍처
 
 ```
-[User] → [Streamlit UI] → [FastAPI Backend] → [RAG System]
+[User] → [React UI] → [FastAPI Backend] → [RAG System]
                                                     ↓
                                             [Hybrid Retriever]
                                                     ↓

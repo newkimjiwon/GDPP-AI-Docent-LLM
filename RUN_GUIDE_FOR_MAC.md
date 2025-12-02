@@ -342,8 +342,6 @@ ps aux | grep ollama
 ```bash
 # Ollama 로그
 brew services info ollama
-
-# FastAPI 로그 (터미널 출력)
 # 백엔드 실행 중인 터미널 확인
 ```
 
