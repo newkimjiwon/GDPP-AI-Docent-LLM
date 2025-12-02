@@ -119,7 +119,10 @@ export default function Register() {
                             type="text"
                             name="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                if (errors.email) validateField('email', e.target.value);
+                            }}
                             onBlur={handleBlur}
                             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition ${errors.email ? 'border-red-500' : 'border-gray-300'
                                 }`}
@@ -139,7 +142,10 @@ export default function Register() {
                             type="password"
                             name="password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                if (errors.password) validateField('password', e.target.value);
+                            }}
                             onBlur={handleBlur}
                             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition ${errors.password ? 'border-red-500' : 'border-gray-300'
                                 }`}
@@ -160,7 +166,10 @@ export default function Register() {
                             type="password"
                             name="confirmPassword"
                             value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onChange={(e) => {
+                                setConfirmPassword(e.target.value);
+                                if (errors.confirmPassword) validateField('confirmPassword', e.target.value);
+                            }}
                             onBlur={handleBlur}
                             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
                                 }`}
