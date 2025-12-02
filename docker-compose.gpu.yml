@@ -46,7 +46,7 @@ services:
       retries: 3
       start_period: 10s
 
-  # Ollama LLM 서버 (CPU 전용)
+  # Ollama LLM 서버 (GPU 전용)
   ollama:
     image: ollama/ollama:latest
     container_name: gdpp-ollama
@@ -62,6 +62,14 @@ services:
     networks:
       - gdpp-network
     restart: unless-stopped
+    # GPU 리소스 할당
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:11434/"]
       interval: 30s
