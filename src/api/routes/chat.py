@@ -59,7 +59,7 @@ def initialize_components():
     
     if ollama_client is None:
         print("[INFO] Ollama 클라이언트 초기화 중...")
-        ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
+        ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
         print(f"[INFO] Ollama URL: {ollama_base_url}")
         ollama_client = OllamaClient(
             base_url=ollama_base_url,
