@@ -55,7 +55,7 @@ services:
     environment:
       - OLLAMA_NUM_PARALLEL=4           # 병렬 요청 처리 (최대 4개)
       - OLLAMA_MAX_LOADED_MODELS=1      # 메모리에 1개 모델만 유지
-      - OLLAMA_KEEP_ALIVE=10m           # 모델을 10분간 메모리에 유지
+      - OLLAMA_KEEP_ALIVE=-1            # 모델을 메모리에 영구 유지 (언로드 방지)
       - OLLAMA_HOST=0.0.0.0:11434       # 모든 인터페이스에서 접근 허용
     volumes:
       - ollama_data:/root/.ollama
