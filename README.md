@@ -4,7 +4,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.122.0-green.svg)](https://fastapi.tiangolo.com/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.51.0-red.svg)](https://streamlit.io/)
+[![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://react.dev/)
 [![Ollama](https://img.shields.io/badge/Ollama-0.13.0-orange.svg)](https://ollama.com/)
 
 ## 목차
@@ -33,8 +33,7 @@
 - **RAG 기반**: 검색 증강 생성으로 정확한 정보 제공
 - **하이브리드 검색**: Dense Vector Search + Sparse BM25 Search
 - **한국어 최적화**: Ko-SBERT 임베딩 및 한국어 LLM 활용
-- **실시간 응답**: Streamlit 기반 인터랙티브 UI
-
+- **실시간 응답**: React 기반 인터랙티브 UI
 
 
 ## 주요 기능
@@ -170,6 +169,8 @@
 
 
 ## 설치 및 실행
+
+> **GCP/Docker 배포 가이드**: [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)를 참고하세요.
 
 ### 시스템 요구사항
 
@@ -334,7 +335,7 @@ curl "http://localhost:8000/api/status"
 ```
 GDDPAIDocent/
 ├── app/
-│   └── streamlit_app.py          # Streamlit 프론트엔드
+│   └── frontend/                  # React 프론트엔드
 ├── data/
 │   ├── raw/                       # 원본 데이터
 │   │   ├── wikipedia_cat_knowledge.json
@@ -428,7 +429,7 @@ GDDPAIDocent/
 - 에러 핸들링 및 로깅
 
 ### Phase 6: 프론트엔드 개발
-- Streamlit 챗봇 UI 구현
+- React 챗봇 UI 구현
 - 실시간 대화 인터페이스
 - 추천 질문 기능
 - 출처 표시 기능
@@ -443,8 +444,10 @@ GDDPAIDocent/
 - **Hybrid Search 효과**: Vector만 사용 대비 15% 정확도 향상
 
 ### LLM 응답 성능
-- **평균 응답 시간**: 2-5초 (GPU 사용 시)
-- **토큰 생성 속도**: ~50 tokens/sec (RTX 3090)
+- **평균 응답 시간**: 
+  - **GPU (RTX 3090)**: 2-5초
+  - **CPU (GCP e2-standard-4)**: 30-60초 (첫 로딩 시), 10-20초 (이후)
+- **토큰 생성 속도**: ~50 tokens/sec (GPU) / ~2-5 tokens/sec (CPU)
 - **메모리 사용량**: ~8GB (모델 + 벡터 DB)
 
 ### 최적화 기법
@@ -453,54 +456,8 @@ GDDPAIDocent/
 - **프롬프트 최적화**: 컨텍스트 길이 제한 (512 토큰)
 
 
-
-## 향후 개선 계획
-
-### 단기 계획 (1-2주)
-- 한국어 특화 모델로 교체 (Llama-3-Korean-Bllossom)
-- 대화 히스토리 기능 추가
-- 브랜드 이미지 표시
-- 부스 지도 통합
-
-### 중기 계획 (1개월)
-- LoRA 파인튜닝으로 도메인 특화
-- Re-ranker 추가로 검색 정확도 향상
-- 다국어 지원 (영어)
-- 음성 인터페이스 추가
-
-### 장기 계획 (3개월)
-- Docker 컨테이너화
-- AWS 배포 (EC2 + GPU)
-- 사용자 피드백 수집 시스템
-- A/B 테스트 프레임워크
-
-
 ## 개발자
 
 - **개발자**: 김지원
 - **프로젝트 기간**: 2025.11.28 - 2025.12.05
 - **연락처**: [newkimjiwon@gmail.com]
-
-
-
-## 감사의 말
-
-- **LG AI Research**: EXAONE 모델 영감
-- **Meta**: Llama 3.1 오픈소스 모델
-- **Ollama**: 로컬 LLM 서빙 도구
-- **Hugging Face**: 한국어 모델 커뮤니티
-- **궁디팡팡 캣페스타**: 프로젝트 주제 제공
-
-
-
-## 참고 자료
-
-- [Ollama Documentation](https://ollama.com/docs)
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [Streamlit Documentation](https://docs.streamlit.io/)
-- [LangChain Documentation](https://python.langchain.com/)
-- [ChromaDB Documentation](https://docs.trychroma.com/)
-
-
-
-**Made with Love for Cat Lovers**
