@@ -46,23 +46,20 @@ services:
       retries: 3
       start_period: 10s
 
-  # Ollama LLM 서버 (GPU 전용)
+  # Ollama LLM 서버 (GPU 지원)
   ollama:
     image: ollama/ollama:latest
     container_name: gdpp-ollama
     ports:
       - "11434:11434"
     environment:
-      - OLLAMA_NUM_PARALLEL=4           # 병렬 요청 처리 (최대 4개)
+      - OLLAMA_NUM_PARALLEL=4           # 병렬 요청 처리
       - OLLAMA_MAX_LOADED_MODELS=1      # 메모리에 1개 모델만 유지
       - OLLAMA_KEEP_ALIVE=10m           # 모델을 10분간 메모리에 유지
       - OLLAMA_HOST=0.0.0.0:11434       # 모든 인터페이스에서 접근 허용
     volumes:
       - ollama_data:/root/.ollama
-    networks:
-      - gdpp-network
-    restart: unless-stopped
-    # GPU 리소스 할당
+    # GPU 설정 추가
     deploy:
       resources:
         reservations:
@@ -70,6 +67,9 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    networks:
+      - gdpp-network
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:11434/"]
       interval: 30s
