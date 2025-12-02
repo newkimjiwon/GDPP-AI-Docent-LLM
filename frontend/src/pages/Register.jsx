@@ -7,15 +7,84 @@ export default function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [errors, setErrors] = useState({});
     const { register, isLoading, error, clearError } = useAuthStore();
     const navigate = useNavigate();
+
+    // 이메일 유효성 검사
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    // 필드별 유효성 검사
+    const validateField = (name, value) => {
+        const newErrors = { ...errors };
+
+        switch (name) {
+            case 'email':
+                if (!value) {
+                    newErrors.email = '이메일을 입력해주세요';
+                } else if (!validateEmail(value)) {
+                    newErrors.email = '유효한 이메일 형식이 아닙니다';
+                } else {
+                    delete newErrors.email;
+                }
+                break;
+
+            case 'password':
+                if (!value) {
+                    newErrors.password = '비밀번호를 입력해주세요';
+                } else if (value.length < 6) {
+                    newErrors.password = '비밀번호는 최소 6자 이상이어야 합니다';
+                } else {
+                    delete newErrors.password;
+                }
+                // 비밀번호 확인도 함께 검사
+                if (confirmPassword && value !== confirmPassword) {
+                    newErrors.confirmPassword = '비밀번호가 일치하지 않습니다';
+                } else if (confirmPassword) {
+                    delete newErrors.confirmPassword;
+                }
+                break;
+
+            case 'confirmPassword':
+                if (!value) {
+                    newErrors.confirmPassword = '비밀번호 확인을 입력해주세요';
+                } else if (value !== password) {
+                    newErrors.confirmPassword = '비밀번호가 일치하지 않습니다';
+                } else {
+                    delete newErrors.confirmPassword;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        setErrors(newErrors);
+    };
+
+    const handleBlur = (e) => {
+        validateField(e.target.name, e.target.value);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         clearError();
 
+        // 모든 필드 검증
+        validateField('email', email);
+        validateField('password', password);
+        validateField('confirmPassword', confirmPassword);
+
+        // 에러가 있으면 제출 중단
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+
         if (password !== confirmPassword) {
-            alert('비밀번호가 일치하지 않습니다');
+            setErrors({ ...errors, confirmPassword: '비밀번호가 일치하지 않습니다' });
             return;
         }
 
@@ -44,16 +113,22 @@ export default function Register() {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            아이디
+                            이메일
                         </label>
                         <input
                             type="text"
+                            name="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
-                            placeholder="아이디를 입력하세요"
+                            onBlur={handleBlur}
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition ${errors.email ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            placeholder="example@email.com"
                             required
                         />
+                        {errors.email && (
+                            <p className="mt-1 text-xs text-red-600">{errors.email}</p>
+                        )}
                     </div>
 
                     <div>
@@ -62,13 +137,19 @@ export default function Register() {
                         </label>
                         <input
                             type="password"
+                            name="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                            onBlur={handleBlur}
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition ${errors.password ? 'border-red-500' : 'border-gray-300'
+                                }`}
                             placeholder="••••••••"
                             required
                             minLength={6}
                         />
+                        {errors.password && (
+                            <p className="mt-1 text-xs text-red-600">{errors.password}</p>
+                        )}
                     </div>
 
                     <div>
@@ -77,18 +158,24 @@ export default function Register() {
                         </label>
                         <input
                             type="password"
+                            name="confirmPassword"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                            onBlur={handleBlur}
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                                }`}
                             placeholder="••••••••"
                             required
                             minLength={6}
                         />
+                        {errors.confirmPassword && (
+                            <p className="mt-1 text-xs text-red-600">{errors.confirmPassword}</p>
+                        )}
                     </div>
 
                     <button
                         type="submit"
-                        disabled={isLoading}
+                        disabled={isLoading || Object.keys(errors).length > 0}
                         className="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isLoading ? '가입 중...' : '회원가입'}

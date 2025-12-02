@@ -73,7 +73,7 @@ class OllamaClient:
             payload["system"] = system
         
         try:
-            response = requests.post(url, json=payload, timeout=120)
+            response = requests.post(url, json=payload, timeout=300)
             if response.status_code == 200:
                 return response.json()['response']
             else:
@@ -116,7 +116,7 @@ class OllamaClient:
             payload["system"] = system
         
         try:
-            response = requests.post(url, json=payload, stream=True, timeout=120)
+            response = requests.post(url, json=payload, stream=True, timeout=300)
             
             if response.status_code == 200:
                 for line in response.iter_lines():
@@ -163,7 +163,7 @@ class OllamaClient:
         }
         
         try:
-            response = requests.post(url, json=payload, timeout=120)
+            response = requests.post(url, json=payload, timeout=300)
             if response.status_code == 200:
                 return response.json()['message']['content']
             else:
