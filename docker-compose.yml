@@ -6,7 +6,7 @@ services:
     build: .
     container_name: gdpp-backend
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - DATABASE_URL=sqlite:///./data/gdpp.db
@@ -31,7 +31,7 @@ services:
     build: ./frontend
     container_name: gdpp-frontend
     ports:
-      - "80:80"
+      - "8000:80"
     depends_on:
       - backend
     networks:
