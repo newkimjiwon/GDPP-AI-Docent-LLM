@@ -30,7 +30,7 @@ services:
     build:
       context: ./frontend
       args:
-        VITE_API_BASE_URL: http://34.64.139.215:8001
+        VITE_API_BASE_URL: /api
     container_name: gdpp-frontend
     ports:
       - "8000:80"
