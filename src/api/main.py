@@ -36,6 +36,10 @@ app.include_router(folders.router, prefix="/api/folders", tags=["folders"])
 app.include_router(conversations.router, prefix="/api/conversations", tags=["conversations"])
 app.include_router(chat.router, prefix="/api", tags=["chat"])
 
+# 관심상품 라우터 추가
+from .routes import favorites
+app.include_router(favorites.router, prefix="/api/favorites", tags=["favorites"])
+
 # 관리자 라우터 추가
 from .routes import admin
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
