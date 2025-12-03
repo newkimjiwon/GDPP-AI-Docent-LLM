@@ -20,6 +20,7 @@ class User(Base):
     # Relationships
     folders = relationship("Folder", backref="user", cascade="all, delete-orphan")
     conversations = relationship("Conversation", backref="user", cascade="all, delete-orphan")
+    favorite_products = relationship("FavoriteProduct", backref="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email})>"

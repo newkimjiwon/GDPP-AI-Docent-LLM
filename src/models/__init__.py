@@ -6,5 +6,6 @@ from .user import User
 from .folder import Folder
 from .conversation import Conversation
 from .message import Message
+from .favorite_product import FavoriteProduct
 
-__all__ = ['User', 'Folder', 'Conversation', 'Message']
+__all__ = ['User', 'Folder', 'Conversation', 'Message', 'FavoriteProduct']
