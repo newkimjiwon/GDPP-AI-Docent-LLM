@@ -1,7 +1,7 @@
 # 궁디팡팡 AI 도슨트 (GDPP AI Docent)
 
-> **LG EXAONE 3.0 (7.8B) 기반 한국어 특화 RAG 챗봇 시스템**  
-> 로컬 LLM + Hybrid Retrieval로 구현한 캣페스타 전시 안내 서비스
+**LG EXAONE 3.0 (7.8B) 기반 한국어 특화 RAG 챗봇 시스템**
+로컬 LLM + Hybrid Retrieval로 구현한 캣페스타 전시 안내 서비스
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.122.0-green.svg)](https://fastapi.tiangolo.com/)
@@ -10,23 +10,22 @@
 [![EXAONE](https://img.shields.io/badge/EXAONE-3.0--7.8B-purple.svg)](https://huggingface.co/LGAI-EXAONE)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://docs.docker.com/compose/)
 
----
 
-## 🎯 프로젝트 개요
+## 프로젝트 개요
 
 **궁디팡팡 AI 도슨트**는 (주)메쎄이상의 캣페스타 방문객을 위한 AI 기반 전시 안내 챗봇입니다. 
 
-### 💡 기획 의도 및 차별화
+### 기획 의도 및 차별화
 
 **기존 Llama 3.1 모델을 사용했으나, 국내 박람회(메쎄이상) 도메인의 특성상 한국어 뉘앙스와 정확한 안내가 중요하다고 판단하여 LG AI Research의 EXAONE 3.0 모델로 교체하여 성능을 최적화했습니다.**
 
-- 🚀 **완전한 로컬 시스템**: 외부 API 의존 없이 온프레미스 환경에서 구동 (비용 절감)
-- 🇰🇷 **한국어 특화**: EXAONE 3.0으로 한국어 문맥 이해도 및 응답 품질 향상
-- 🎯 **RAG 기반 환각 방지**: 검색 증강 생성으로 정확한 정보만 제공
-- 🔍 **Hybrid Search**: Dense Vector + Sparse BM25로 고유명사(브랜드명) 검색 정확도 보완
-- 📦 **One-Command 배포**: Docker Compose로 즉시 배포 가능
+- **완전한 로컬 시스템**: 외부 API 의존 없이 온프레미스 환경에서 구동 (비용 절감)
+- **한국어 특화**: EXAONE 3.0으로 한국어 문맥 이해도 및 응답 품질 향상
+- **RAG 기반 환각 방지**: 검색 증강 생성으로 정확한 정보만 제공
+- **Hybrid Search**: Dense Vector + Sparse BM25로 고유명사(브랜드명) 검색 정확도 보완
+- **One-Command 배포**: Docker Compose로 즉시 배포 가능
 
-### 🏆 핵심 가치
+### 핵심 가치
 
 | 구분 | 일반적인 챗봇 | 본 프로젝트 |
 |------|--------------|------------|
@@ -35,20 +34,6 @@
 | 한국어 | 범용 모델 | 한국어 특화 모델 |
 | 정확도 | 환각 발생 가능 | 환각 방지 시스템 |
 | 배포 | 복잡한 설정 | Docker One-Command |
----
-
-## 목차
-
-- [프로젝트 개요](#프로젝트-개요)
-- [Quick Start](#quick-start-docker---추천)
-- [주요 기능](#주요-기능)
-- [시스템 아키텍처](#시스템-아키텍처)
-- [기술적 의사결정](#기술적-의사결정-technical-decisions)
-- [기술 스택](#기술-스택)
-- [성능 및 최적화](#성능-및-최적화)
-- [개발 과정](#개발-과정)
-
----
 
 ## 주요 기능
 
@@ -92,10 +77,11 @@
 ## 시스템 아키텍처
 
 ### 1. 전체 시스템 구조
+<img width="2268" height="1134" alt="슬라이드2" src="https://github.com/user-attachments/assets/a0b5e10a-3f51-4275-a19d-11a274cbba50" />
 
 
 ### 2. 데이터 파이프라인 (RAG)
-
+<img width="2268" height="1134" alt="슬라이드1" src="https://github.com/user-attachments/assets/b5a51e08-347a-403c-91e9-49c2d2e08c76" />
 
 ### 데이터 플로우
 ```
@@ -231,7 +217,6 @@
 - 외국어 혼입 제거
 - 응답 품질 개선
 
----
 
 ### 왜 Hybrid Retrieval인가?
 
@@ -249,7 +234,6 @@
 - 검색 정확도 향상
 - 고유명사 검색 성공률 개선
 
----
 
 ### 왜 FastAPI + React + Docker인가?
 
@@ -313,7 +297,6 @@ docker compose restart backend
 echo "JWT_SECRET_KEY=your-super-secret-key-here" > .env
 ```
 
----
 
 ### 시스템 요구사항
 
@@ -519,10 +502,10 @@ GDDPAIDocent/
 ### 수집된 데이터
 
 | 데이터 소스 | 항목 수 | 총 크기 | 설명 |
-||--|||
+| :--- | :--- | :--- | :--- |
 | Wikipedia | 12 페이지 | 27,081자 | 고양이 관련 지식 |
-| GDPP 브랜드 | 52 브랜드 | - | 캣페스타 참가 브랜드 |
-| **총 청크** | **64개** | **31,173자** | **전처리 완료** |
+| GDPP 브랜드 | **243 브랜드** | - | 캣페스타 참가 브랜드 |
+| **총 청크** | **297개** | **100,907자** | **전처리 완료** |
 
 ### 브랜드 카테고리 분포
 
@@ -587,7 +570,7 @@ GDDPAIDocent/
 | 환경 | 하드웨어 스펙 | 평균 응답 시간 | 토큰 생성 속도 | 비고 |
 |:---:|:---:|:---:|:---:|:---|
 | **Local / GPU** | NVIDIA RTX 3090 (24GB) | **5 ~ 10초** | ~50 tokens/sec | **권장 사양 (쾌적함)** |
-| **Cloud / CPU** | GCP e2-standard-8 (8 vCPU) | 60 ~ 75초 | ~5-10 tokens/sec | 최소 사양 (실행 가능) |
+| **Cloud / CPU** | GCP e2-standard-8 (8 vCPU) | 60 ~ 90초 | ~5-10 tokens/sec | 최소 사양 (실행 가능) |
 
 ### 성능 분석
 - **GPU 가속 권장**: 7.8B 모델의 특성상 CPU 환경에서는 연산 지연이 발생하므로, 실시간 서비스 시 **GPU 환경을 강력히 권장**합니다.
@@ -623,6 +606,5 @@ GDDPAIDocent/
 - **GitHub**: [https://github.com/newkimjiwon/GDPP-AI-Docent-LLM](https://github.com/newkimjiwon/GDPP-AI-Docent-LLM)
 - **이메일**: newkimjiwon@gmail.com
 
----
 
 **Made with ❤️ for 궁디팡팡 캣페스타**
