@@ -63,7 +63,7 @@ def initialize_components():
         print(f"[INFO] Ollama URL: {ollama_base_url}")
         ollama_client = OllamaClient(
             base_url=ollama_base_url,
-            model="llama3.1:8b"
+            model="anpigon/exaone-3.0-7.8b-instruct-llamafied"  # EXAONE 3.0 for Korean
         )
 
 
@@ -71,7 +71,7 @@ class ChatRequest(BaseModel):
     """채팅 요청 모델"""
     message: str
     conversation_id: Optional[int] = None  # 로그인 사용자의 대화 ID
-    temperature: Optional[float] = 0.7
+    temperature: Optional[float] = 0.3  # 낮은 temperature로 환각 방지
     max_tokens: Optional[int] = 2048
     top_k: Optional[int] = 5
 
@@ -110,8 +110,26 @@ async def chat(
             k=request.top_k
         )
         
-        # 2. 프롬프트 생성
-        prompt_data = create_chat_prompt(request.message, search_results)
+        # 1.5. 유사도 필터링 (낮은 점수 문서 제외)
+        SIMILARITY_THRESHOLD = 0.15  # 하이브리드 점수 임계값 (0.15로 조정)
+        filtered_results = [
+            r for r in search_results 
+            if r.get('hybrid_score', 0) >= SIMILARITY_THRESHOLD
+        ]
+        
+        # 필터링 결과 로그
+        print(f"[INFO] 검색 결과: {len(search_results)}개 → 필터링 후: {len(filtered_results)}개")
+        if filtered_results:
+            print(f"[INFO] 최고 점수: {filtered_results[0].get('hybrid_score', 0):.4f}")
+            print(f"[INFO] 최저 점수: {filtered_results[-1].get('hybrid_score', 0):.4f}")
+        
+        # 필터링된 결과가 없으면 최소 1개는 사용
+        if not filtered_results and search_results:
+            print("[WARNING] 필터링 결과 없음, 최상위 1개 문서 사용")
+            filtered_results = search_results[:1]
+        
+        # 2. 프롬프트 생성 (필터링된 결과 사용)
+        prompt_data = create_chat_prompt(request.message, filtered_results)
         
         # 3. LLM 호출
         print("[INFO] LLM 호출 중...")
@@ -122,9 +140,9 @@ async def chat(
             max_tokens=request.max_tokens
         )
         
-        # 4. 소스 정보 추출
+        # 4. 소스 정보 추출 (필터링된 결과 사용)
         sources = []
-        for result in search_results[:3]:  # 상위 3개만
+        for result in filtered_results[:3]:  # 상위 3개만
             metadata = result['metadata']
             sources.append({
                 "source": metadata.get('source', ''),

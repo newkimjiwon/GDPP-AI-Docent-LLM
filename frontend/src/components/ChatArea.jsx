@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import useChatStore from '../store/chatStore';
 import useAuthStore from '../store/authStore';
 
-export default function ChatArea() {
+export default function ChatArea({ sidebarOpen = true, productPanelOpen = true }) {
     const { messages, sendMessage, isLoading } = useChatStore();
     const { isAuthenticated } = useAuthStore();
     const [input, setInput] = useState('');
@@ -30,7 +30,7 @@ export default function ChatArea() {
         <div className="h-full flex flex-col">
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+            <div className={`flex-1 overflow-y-auto p-4 space-y-4 min-h-0 ${!sidebarOpen ? 'pl-20' : ''} ${!productPanelOpen ? 'pr-20' : ''}`}>
                 {messages.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center text-gray-400">

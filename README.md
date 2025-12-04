@@ -53,6 +53,18 @@
 - 문맥을 고려한 응답 생성
 - 출처 표시로 신뢰성 확보
 
+### 4. 응답 정확도 향상
+- **환각 방지**: 시스템 프롬프트 강화 및 Temperature 0.3 설정
+- **유사도 필터링**: 임계값 0.15 기반 관련성 낮은 문서 제거
+- **Context 반복 제거**: 자연스러운 대화 흐름
+
+### 5. 사용자 인증 및 보안
+- **비밀번호 강도 검증**: 실시간 5가지 조건 표시
+  - 최소 8자 이상
+  - 대문자, 소문자, 숫자, 특수문자 포함
+- **JWT 기반 인증**: 안전한 토큰 기반 인증
+- **게스트 모드**: 로그인 없이 즉시 사용 가능
+
 
 
 ## 시스템 아키텍처
@@ -153,9 +165,11 @@
 - **BM25**: 키워드 기반 검색
 
 ### LLM
-- **Llama 3.1:8b**: Meta의 오픈소스 LLM (4.9GB)
-- 한국어 지원 가능
-- 로컬 GPU 가속 (RTX 3090 24GB)
+- **EXAONE 3.0 7.8B**: LG AI Research의 한국어 특화 LLM (4.8GB)
+  - 2024년 8월 출시 최신 모델
+  - 한국어 성능 최적화
+  - 비상업적 연구/평가 목적 사용
+- 로컬 CPU/GPU 가속 지원
 
 ### Data Collection
 - **Wikipedia API**: 고양이 지식 수집
@@ -215,8 +229,8 @@ curl -fsSL https://ollama.com/install.sh | sh
 # Ollama 서비스 시작 (자동 시작됨)
 # systemctl status ollama
 
-# LLM 모델 다운로드 (약 5GB, 5-10분 소요)
-ollama pull llama3.1:8b
+# EXAONE 3.0 모델 다운로드 (약 4.8GB, 5-10분 소요)
+ollama pull anpigon/exaone-3.0-7.8b-instruct-llamafied
 
 # 모델 확인
 ollama list
@@ -267,6 +281,32 @@ npm run dev
 - **React 프론트엔드**: http://localhost:5173
 - **백엔드 API**: http://localhost:8000
 - **API 문서**: http://localhost:8000/docs
+
+### 6. Docker로 배포 (선택사항)
+
+```bash
+# Docker Compose 실행
+docker-compose up -d
+
+# EXAONE 3.0 모델 설치 (필수!)
+docker exec -it gdpp-ollama ollama pull anpigon/exaone-3.0-7.8b-instruct-llamafied
+
+# 백엔드 재시작
+docker-compose restart backend
+
+# 로그 확인
+docker-compose logs -f
+
+# 접속
+# - 프론트엔드: http://localhost:8000
+# - 백엔드 API: http://localhost:8001
+```
+
+**Docker 환경 변수 설정:**
+```bash
+# .env 파일 생성
+echo "JWT_SECRET_KEY=your-super-secret-key-here" > .env
+```
 
 
 
@@ -442,18 +482,34 @@ GDDPAIDocent/
 - **평균 검색 시간**: ~100ms
 - **검색 정확도**: 상위 5개 결과 중 관련 문서 포함률 95%+
 - **Hybrid Search 효과**: Vector만 사용 대비 15% 정확도 향상
+- **유사도 필터링**: 임계값 0.15로 관련성 낮은 문서 제거
 
 ### LLM 응답 성능
 - **평균 응답 시간**: 
   - **GPU (RTX 3090)**: 2-5초
-  - **CPU (GCP e2-standard-4)**: 30-60초 (첫 로딩 시), 10-20초 (이후)
-- **토큰 생성 속도**: ~50 tokens/sec (GPU) / ~2-5 tokens/sec (CPU)
+  - **CPU (GCP e2-standard-8)**: 15-30초 (EXAONE 3.0 최적화)
+- **토큰 생성 속도**: ~50 tokens/sec (GPU) / ~5-10 tokens/sec (CPU)
 - **메모리 사용량**: ~8GB (모델 + 벡터 DB)
+
+### 정확도 개선
+- **환각 방지**: 
+  - 시스템 프롬프트 강화
+  - Temperature 0.7 → 0.3 감소
+  - Context 반복 언급 제거
+- **유사도 필터링**: 
+  - 임계값 0.15 적용
+  - 평균 5개 → 1-3개 고품질 문서 선별
+- **한국어 품질**: 
+  - EXAONE 3.0 사용으로 외국어 혼입 제거
+  - 자연스러운 한국어 응답
 
 ### 최적화 기법
 - **임베딩 캐싱**: 동일 쿼리 재사용
 - **배치 처리**: 벡터 DB 구축 시 배치 크기 32
 - **프롬프트 최적화**: 컨텍스트 길이 제한 (512 토큰)
+- **Ollama 최적화**: 
+  - `OLLAMA_KEEP_ALIVE=-1` (모델 영구 유지)
+  - `OLLAMA_NUM_PARALLEL=4` (병렬 처리)
 
 
 ## 개발자

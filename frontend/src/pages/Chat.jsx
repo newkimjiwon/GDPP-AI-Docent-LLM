@@ -12,6 +12,7 @@ export default function Chat() {
     const { fetchConversations, createConversation } = useChatStore();
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [productPanelOpen, setProductPanelOpen] = useState(true);
 
     useEffect(() => {
         // 로그인한 사용자만 대화 목록 불러오기
@@ -52,11 +53,14 @@ export default function Chat() {
 
             {/* Main Chat Area */}
             <div className="flex-1 flex flex-col min-w-0">
-                <ChatArea />
+                <ChatArea sidebarOpen={sidebarOpen} productPanelOpen={productPanelOpen} />
             </div>
 
             {/* Product Panel */}
-            <ProductPanel />
+            <ProductPanel
+                isOpen={productPanelOpen}
+                onToggle={() => setProductPanelOpen(!productPanelOpen)}
+            />
         </div>
     );
 }
