@@ -53,14 +53,14 @@ ollama serve
 ### LLM 모델 다운로드
 
 ```bash
-# Llama 3.1 8B 모델 다운로드 (약 4.9GB, 5-10분 소요)
-ollama pull llama3.1:8b
+# EXAONE 3.0 7.8B 모델 다운로드 (약 4.8GB, 5-10분 소요)
+ollama pull anpigon/exaone-3.0-7.8b-instruct-llamafied
 
 # 모델 확인
 ollama list
 
-# 테스트
-ollama run llama3.1:8b "안녕하세요"
+# 모델 테스트
+ollama run anpigon/exaone-3.0-7.8b-instruct-llamafied "안녕하세요"
 ```
 
 **메모리 부족 시 경량 모델 사용:**
@@ -107,7 +107,7 @@ nano .env
 ```bash
 # Ollama Configuration
 OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=llama3.1:8b
+OLLAMA_MODEL=anpigon/exaone-3.0-7.8b-instruct-llamafied
 
 # Vector DB
 CHROMA_PERSIST_DIRECTORY=./data/vectordb
@@ -257,26 +257,6 @@ kill -9 <PID>
 
 ```bash
 # node_modules 삭제 후 재설치
-cd frontend
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### 메모리 부족
-
-```bash
-# 경량 모델로 변경
-ollama pull llama3.2:3b
-
-# .env 파일 수정
-OLLAMA_MODEL=llama3.2:3b
-
-# 백엔드 재시작
-```
-
-### ChromaDB 오류
-
-```bash
 # 벡터 DB 재구축
 rm -rf data/vectordb
 python src/rag/build_vectordb.py

@@ -18,8 +18,8 @@ curl -fsSL https://ollama.com/install.sh | sh
 # Ollama 서비스 시작
 ollama serve
 
-# 새 터미널에서 모델 다운로드 (약 4.9GB)
-ollama pull llama3.1:8b
+# EXAONE 3.0 모델 다운로드 (약 4.8GB, 5-10분 소요)
+ollama pull anpigon/exaone-3.0-7.8b-instruct-llamafied
 ```
 
 ### 2. Python 환경 설정
@@ -99,6 +99,12 @@ ollama serve
 ### API 서버 연결 실패
 - 백엔드 서버가 실행 중인지 확인
 - 포트 8000이 사용 가능한지 확인
+
+### 느린 응답 속도
+
+- GPU 사용 권장
+- 더 작은 모델 사용 가능 (성능 저하 가능성)
+- 다른 GPU 프로세스 종료
 
 ### GPU 메모리 부족
 - 더 작은 모델 사용: `ollama pull llama3.2:3b`

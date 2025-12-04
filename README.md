@@ -1,70 +1,92 @@
 # 궁디팡팡 AI 도슨트 (GDPP AI Docent)
 
-> 로컬 LLM 기반 RAG 시스템을 활용한 캣페스타 전시 안내 챗봇
+> **LG EXAONE 3.0 (7.8B) 기반 한국어 특화 RAG 챗봇 시스템**  
+> 로컬 LLM + Hybrid Retrieval로 구현한 캣페스타 전시 안내 서비스
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.122.0-green.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://react.dev/)
 [![Ollama](https://img.shields.io/badge/Ollama-0.13.0-orange.svg)](https://ollama.com/)
+[![EXAONE](https://img.shields.io/badge/EXAONE-3.0--7.8B-purple.svg)](https://huggingface.co/LGAI-EXAONE)
+[![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://docs.docker.com/compose/)
+
+---
+
+## 🎯 프로젝트 개요
+
+**궁디팡팡 AI 도슨트**는 (주)메쎄이상의 캣페스타 방문객을 위한 AI 기반 전시 안내 챗봇입니다. 
+
+### 💡 기획 의도 및 차별화
+
+**기존 Llama 3.1 모델을 사용했으나, 국내 박람회(메쎄이상) 도메인의 특성상 한국어 뉘앙스와 정확한 안내가 중요하다고 판단하여 LG AI Research의 EXAONE 3.0 모델로 교체하여 성능을 최적화했습니다.**
+
+- 🚀 **완전한 로컬 시스템**: 외부 API 의존 없이 온프레미스 환경에서 구동 (비용 절감)
+- 🇰🇷 **한국어 특화**: EXAONE 3.0으로 한국어 문맥 이해도 및 응답 품질 향상
+- 🎯 **RAG 기반 환각 방지**: 검색 증강 생성으로 정확한 정보만 제공
+- 🔍 **Hybrid Search**: Dense Vector + Sparse BM25로 고유명사(브랜드명) 검색 정확도 보완
+- 📦 **One-Command 배포**: Docker Compose로 즉시 배포 가능
+
+### 🏆 핵심 가치
+
+| 구분 | 일반적인 챗봇 | 본 프로젝트 |
+|------|--------------|------------|
+| LLM | OpenAI API (유료) | EXAONE 3.0 (로컬, 무료) |
+| 검색 | 단순 키워드 | Hybrid RAG (Vector + BM25) |
+| 한국어 | 범용 모델 | 한국어 특화 모델 |
+| 정확도 | 환각 발생 가능 | 환각 방지 시스템 |
+| 배포 | 복잡한 설정 | Docker One-Command |
+---
 
 ## 목차
 
 - [프로젝트 개요](#프로젝트-개요)
+- [Quick Start](#quick-start-docker---추천)
 - [주요 기능](#주요-기능)
 - [시스템 아키텍처](#시스템-아키텍처)
+- [기술적 의사결정](#기술적-의사결정-technical-decisions)
 - [기술 스택](#기술-스택)
-- [설치 및 실행](#설치-및-실행)
-- [사용 방법](#사용-방법)
-- [프로젝트 구조](#프로젝트-구조)
-- [데이터 현황](#데이터-현황)
-- [개발 과정](#개발-과정)
 - [성능 및 최적화](#성능-및-최적화)
-- [향후 개선 계획](#향후-개선-계획)
+- [개발 과정](#개발-과정)
 
-
-
-## 프로젝트 개요
-
-**궁디팡팡 AI 도슨트**는 캣페스타 방문객을 위한 AI 기반 전시 안내 챗봇입니다. 외부 API에 의존하지 않고 완전히 로컬 환경에서 구동되는 LLM과 RAG(Retrieval-Augmented Generation) 시스템을 통해 정확하고 신뢰할 수 있는 정보를 제공합니다.
-
-### 핵심 특징
-
-- **완전한 로컬 시스템**: 외부 API 없이 온프레미스 환경에서 구동
-- **RAG 기반**: 검색 증강 생성으로 정확한 정보 제공
-- **하이브리드 검색**: Dense Vector Search + Sparse BM25 Search
-- **한국어 최적화**: Ko-SBERT 임베딩 및 한국어 LLM 활용
-- **실시간 응답**: React 기반 인터랙티브 UI
-
+---
 
 ## 주요 기능
 
-### 1. 브랜드 정보 제공
+### 전시회 특화 도슨트 모드
+
+**1. 브랜드 정보 제공**
 - 52개 캣페스타 참가 브랜드 정보 검색
 - 브랜드별 카테고리, 제품, 부스 위치 안내
+- 홈페이지/SNS 링크 제공
 - 사용자 질문에 맞는 브랜드 추천
 
-### 2. 고양이 지식 제공
+**예시 질문:**
+- "고양이 사료 추천해줘"
+- "F구역에 어떤 브랜드가 있어?"
+- "건강백서캣 부스 번호는?"
+
+**2. 이벤트 정보 안내**
+- 궁디팡팡 캣페스타 일정 및 장소
+- 운영 시간 및 입장료 정보
+- 사무국 연락처 및 FAQ
+
+**3. 고양이 지식 제공**
 - Wikipedia 기반 고양이 관련 지식 (12개 페이지)
 - 품종, 행동, 건강, 영양 등 다양한 주제
 - 신뢰할 수 있는 출처 기반 정보
 
-### 3. 자연스러운 대화
-- 한국어 자연어 처리
-- 문맥을 고려한 응답 생성
-- 출처 표시로 신뢰성 확보
-
-### 4. 응답 정확도 향상
-- **환각 방지**: 시스템 프롬프트 강화 및 Temperature 0.3 설정
+**4. 응답 정확도 향상 시스템**
+- **환각 방지**: 시스템 프롬프트 강화 + Temperature 0.3 설정
 - **유사도 필터링**: 임계값 0.15 기반 관련성 낮은 문서 제거
-- **Context 반복 제거**: 자연스러운 대화 흐름
+- **출처 표시**: 모든 응답에 참고 자료 출처 명시
+- **자연스러운 대화**: Context 반복 언급 제거
 
-### 5. 사용자 인증 및 보안
-- **비밀번호 강도 검증**: 실시간 5가지 조건 표시
-  - 최소 8자 이상
-  - 대문자, 소문자, 숫자, 특수문자 포함
+**5. 사용자 인증 및 관리**
+- **비밀번호 강도 검증**: 실시간 5가지 조건 표시 (8자 이상, 대소문자, 숫자, 특수문자)
 - **JWT 기반 인증**: 안전한 토큰 기반 인증
 - **게스트 모드**: 로그인 없이 즉시 사용 가능
-
+- **대화 히스토리**: 로그인 사용자 대화 자동 저장
+- **관심 상품 관리**: URL 북마크 기능
 
 
 ## 시스템 아키텍처
@@ -182,16 +204,113 @@
 - **WSL2**: 개발 환경 (Ubuntu on Windows)
 
 
+## 기술적 의사결정 (Technical Decisions)
+
+### 왜 EXAONE 3.0을 선택했는가?
+
+**문제 상황:**
+- 초기 Llama 3.1 8B 사용 시 한국어 응답 품질 저하
+- Llama 3.2 3B로 경량화 시도 → 외국어(태국어 등) 혼입 발생
+- 브랜드명, 부스 번호 등 정확한 정보 전달 필요
+
+**해결:**
+- **EXAONE 3.0 7.8B** (LG AI Research, 2024년 8월)
+  - 한국어 문맥 이해도가 Llama 대비 우수
+  - 외국어 혼입 제거, 자연스러운 한국어 응답
+  - 국내 박람회 도메인에 최적화
+
+**결과:**
+- 부스 번호 검색 정확도 향상
+- 외국어 혼입 제거
+- 응답 품질 개선
+
+---
+
+### 왜 Hybrid Retrieval인가?
+
+**문제 상황:**
+- 단순 벡터 검색(Dense)만 사용 시 "애니몬다" 같은 고유명사 검색 실패
+- 의미는 이해하지만 정확한 브랜드명 매칭 어려움
+
+**해결:**
+- **ChromaDB (Vector Search)** + **BM25 (Keyword Search)**
+  - Vector Search: 의미 기반 검색 ("고양이 사료" → 관련 브랜드)
+  - BM25: 키워드 정확 매칭 ("애니몬다" → Animonda 브랜드)
+  - 앙상블 가중치: Vector 70% + BM25 30%
+
+**결과:**
+- 검색 정확도 향상
+- 고유명사 검색 성공률 개선
+
+---
+
+### 왜 FastAPI + React + Docker인가?
+
+**아키텍처 선택 이유:**
+
+**1. FastAPI (Backend)**
+- 비동기 처리로 LLM 응답 대기 시 다른 요청 처리 가능
+- 자동 API 문서 생성 (`/docs`)
+- Type Hints로 코드 안정성 확보
+
+**2. React (Frontend)**
+- 컴포넌트 기반 재사용성
+- 실시간 채팅 UI에 최적화
+- Zustand로 경량 상태 관리
+
+**3. Docker Compose**
+- 프론트/백/LLM 서버 통합 관리
+- 환경 의존성 제거
+- One-Command 배포 (`docker-compose up`)
+
+**결과:**
+- MSA 고려한 프론트/백 분리
+- 배포 환경 통일성 확보
+- 개발/프로덕션 환경 일치
+
+
 ## 설치 및 실행
 
 > **GCP/Docker 배포 가이드**: [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)를 참고하세요.
+
+### Quick Start (Docker - 추천)
+
+**가장 빠른 실행 방법 (5분):**
+
+```bash
+# 1. 저장소 클론
+git clone https://github.com/newkimjiwon/GDPP-AI-Docent-LLM.git
+cd GDPP-AI-Docent-LLM
+
+# 2. Docker Compose 실행
+docker-compose up -d
+
+# 3. EXAONE 3.0 모델 설치 (필수! 약 4.8GB, 5-10분 소요)
+docker exec -it gdpp-ollama ollama pull anpigon/exaone-3.0-7.8b-instruct-llamafied
+
+# 4. 백엔드 재시작
+docker-compose restart backend
+
+# 5. 접속
+# - 프론트엔드: http://localhost:8000
+# - 백엔드 API: http://localhost:8001
+# - API 문서: http://localhost:8001/docs
+```
+
+**환경 변수 설정 (선택사항):**
+```bash
+# .env 파일 생성
+echo "JWT_SECRET_KEY=your-super-secret-key-here" > .env
+```
+
+---
 
 ### 시스템 요구사항
 
 **최소 사양:**
 - CPU: 4코어 이상
 - RAM: 16GB 이상
-- 디스크: 20GB 이상 여유 공간
+- 디스크: 30GB 이상 여유 공간
 - OS: Linux (WSL2), macOS
 
 **권장 사양:**
@@ -516,4 +635,10 @@ GDDPAIDocent/
 
 - **개발자**: 김지원
 - **프로젝트 기간**: 2025.11.28 - 2025.12.05
-- **연락처**: [newkimjiwon@gmail.com]
+- **제출**: (주)메쎄이상 웹 & AI 개발 부문 채용 과제
+- **GitHub**: [https://github.com/newkimjiwon/GDPP-AI-Docent-LLM](https://github.com/newkimjiwon/GDPP-AI-Docent-LLM)
+- **이메일**: newkimjiwon@gmail.com
+
+---
+
+**Made with ❤️ for 궁디팡팡 캣페스타**
