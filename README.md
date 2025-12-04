@@ -1,6 +1,6 @@
 # 궁디팡팡 AI 도슨트 (GDPP AI Docent)
 
-**LG EXAONE 3.0 (7.8B) 기반 한국어 특화 RAG 챗봇 시스템**
+**LG EXAONE 3.0 (7.8B) 기반 한국어 특화 RAG 챗봇 시스템** <br/>
 로컬 LLM + Hybrid Retrieval로 구현한 캣페스타 전시 안내 서비스
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
@@ -77,11 +77,10 @@
 ## 시스템 아키텍처
 
 ### 1. 전체 시스템 구조
-<img width="2268" height="1134" alt="슬라이드2" src="https://github.com/user-attachments/assets/a0b5e10a-3f51-4275-a19d-11a274cbba50" />
-
+<img width="2268" height="1134" alt="슬라이드2" src="https://github.com/user-attachments/assets/dd167200-e135-4063-9801-c663bfcf26ef" />
 
 ### 2. 데이터 파이프라인 (RAG)
-<img width="2268" height="1134" alt="슬라이드1" src="https://github.com/user-attachments/assets/b5a51e08-347a-403c-91e9-49c2d2e08c76" />
+<img width="2268" height="1134" alt="슬라이드1" src="https://github.com/user-attachments/assets/ceca850a-b87d-4118-8f9c-28a69aa6edb0" />
 
 ### 데이터 플로우
 ```
