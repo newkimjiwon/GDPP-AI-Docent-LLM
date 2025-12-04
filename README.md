@@ -91,6 +91,13 @@
 
 ## 시스템 아키텍처
 
+### 1. 전체 시스템 구조
+
+
+### 2. 데이터 파이프라인 (RAG)
+
+
+### 데이터 플로우
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                        사용자 (User)                        │
@@ -261,7 +268,7 @@
 **3. Docker Compose**
 - 프론트/백/LLM 서버 통합 관리
 - 환경 의존성 제거
-- One-Command 배포 (`docker-compose up`)
+- One-Command 배포 (`docker compose up`)
 
 **결과:**
 - MSA 고려한 프론트/백 분리
@@ -273,7 +280,7 @@
 
 > **GCP/Docker 배포 가이드**: [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)를 참고하세요.
 
-### Quick Start (Docker - 추천)
+### Quick Start (Docker One-Command)
 
 **가장 빠른 실행 방법 (5분):**
 
@@ -283,15 +290,18 @@ git clone https://github.com/newkimjiwon/GDPP-AI-Docent-LLM.git
 cd GDPP-AI-Docent-LLM
 
 # 2. Docker Compose 실행
-docker-compose up -d
+docker compose up -d
 
 # 3. EXAONE 3.0 모델 설치 (필수! 약 4.8GB, 5-10분 소요)
 docker exec -it gdpp-ollama ollama pull anpigon/exaone-3.0-7.8b-instruct-llamafied
 
-# 4. 백엔드 재시작
-docker-compose restart backend
+# 4. Vector DB 생성
+docker exec -it gdpp-backend python src/rag/build_vectordb.py
 
-# 5. 접속
+# 5. 백엔드 재시작
+docker compose restart backend
+
+# 6. 접속
 # - 프론트엔드: http://localhost:8000
 # - 백엔드 API: http://localhost:8001
 # - API 문서: http://localhost:8001/docs
@@ -311,7 +321,7 @@ echo "JWT_SECRET_KEY=your-super-secret-key-here" > .env
 - CPU: 4코어 이상
 - RAM: 16GB 이상
 - 디스크: 30GB 이상 여유 공간
-- OS: Linux (WSL2), macOS
+- OS: Linux (WSL2), macOS, Windows
 
 **권장 사양:**
 - CPU: 8코어 이상
@@ -400,32 +410,6 @@ npm run dev
 - **React 프론트엔드**: http://localhost:5173
 - **백엔드 API**: http://localhost:8000
 - **API 문서**: http://localhost:8000/docs
-
-### 6. Docker로 배포 (선택사항)
-
-```bash
-# Docker Compose 실행
-docker-compose up -d
-
-# EXAONE 3.0 모델 설치 (필수!)
-docker exec -it gdpp-ollama ollama pull anpigon/exaone-3.0-7.8b-instruct-llamafied
-
-# 백엔드 재시작
-docker-compose restart backend
-
-# 로그 확인
-docker-compose logs -f
-
-# 접속
-# - 프론트엔드: http://localhost:8000
-# - 백엔드 API: http://localhost:8001
-```
-
-**Docker 환경 변수 설정:**
-```bash
-# .env 파일 생성
-echo "JWT_SECRET_KEY=your-super-secret-key-here" > .env
-```
 
 
 
@@ -597,18 +581,18 @@ GDDPAIDocent/
 
 ## 성능 및 최적화
 
-### 검색 성능
-- **평균 검색 시간**: ~100ms
-- **검색 정확도**: 상위 5개 결과 중 관련 문서 포함률 95%+
-- **Hybrid Search 효과**: Vector만 사용 대비 15% 정확도 향상
-- **유사도 필터링**: 임계값 0.15로 관련성 낮은 문서 제거
+### LLM 응답 속도 및 리소스 (Benchmark)
+실제 배포 환경에서 측정한 EXAONE 3.0 (7.8B) 모델의 성능 지표입니다.
 
-### LLM 응답 성능
-- **평균 응답 시간**: 
-  - **GPU (RTX 3090)**: 2-5초
-  - **CPU (GCP e2-standard-8)**: 15-30초 (EXAONE 3.0 최적화)
-- **토큰 생성 속도**: ~50 tokens/sec (GPU) / ~5-10 tokens/sec (CPU)
-- **메모리 사용량**: ~8GB (모델 + 벡터 DB)
+| 환경 | 하드웨어 스펙 | 평균 응답 시간 | 토큰 생성 속도 | 비고 |
+|:---:|:---:|:---:|:---:|:---|
+| **Local / GPU** | NVIDIA RTX 3090 (24GB) | **5 ~ 10초** | ~50 tokens/sec | **권장 사양 (쾌적함)** |
+| **Cloud / CPU** | GCP e2-standard-8 (8 vCPU) | 60 ~ 75초 | ~5-10 tokens/sec | 최소 사양 (실행 가능) |
+
+### 성능 분석
+- **GPU 가속 권장**: 7.8B 모델의 특성상 CPU 환경에서는 연산 지연이 발생하므로, 실시간 서비스 시 **GPU 환경을 강력히 권장**합니다.
+- **메모리 최적화**: 모델(약 4.8GB)과 벡터 DB, 애플리케이션을 포함하여 **총 약 8GB의 메모리**를 점유하여, 16GB RAM 환경에서도 안정적으로 구동됩니다.
+- **검색 속도 (RAG)**: Hybrid Search(BM25+Vector) 단계는 **평균 0.1초 미만**으로 병목 없이 매우 빠르게 수행됩니다.
 
 ### 정확도 개선
 - **환각 방지**: 
