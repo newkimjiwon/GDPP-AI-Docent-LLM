@@ -1,0 +1,56 @@
+[
+    {
+        "title": "궁디팡팡 캣페스타 운영 사무국",
+        "description": "궁디팡팡 캣페스타 운영 사무국 정보",
+        "contact": {
+            "office_hours": "평일 10:00~18:00 (주말 및 공휴일 휴무)",
+            "email": "gdppcat@esgroup.net",
+            "phone": "02-6010-6669",
+            "inquiry_page": "https://catfesta.com/mypage/myqna_1vs1"
+        },
+        "website": {
+            "main": "https://catfesta.com/",
+            "faq": "https://catfesta.com/information/visitor-faq/"
+        },
+        "company_info": {
+            "name": "(주)캣페스타",
+            "ceo": "이상택",
+            "business_number": "808-86-00714",
+            "address": "서울특별시 마포구 월드컵북로58길 9, ES타워",
+            "privacy_officer": "이상택",
+            "mail_order_registration": "제 2024-서울마포-0411호"
+        },
+        "schedule_2025": [
+            {
+                "event_number": 32,
+                "dates": "2025. 3. 28 ~ 3.30",
+                "location": "부산 BEXCO"
+            },
+            {
+                "event_number": 33,
+                "dates": "2025. 5. 30 ~ 6.1",
+                "location": "서울 aT센터"
+            },
+            {
+                "event_number": 34,
+                "dates": "2025. 9. 19 ~ 9. 21",
+                "location": "일산 KINTEX"
+            },
+            {
+                "event_number": 35,
+                "dates": "2025. 12. 5 ~ 12. 7",
+                "location": "서울 SETEC"
+            }
+        ],
+        "important_rules": {
+            "pet_entry": "반려동물 동반 입장 절대 불가 (고양이의 특성상 안전을 위해 입장 허용하지 않음. 적발 시 즉시 퇴장)",
+            "re_entry": "재입장 가능",
+            "free_entry_eligibility": [
+                "장애인 본인 (복지 카드 소지)",
+                "노약자 만 65세 이상 본인 (신분증)",
+                "만 15세 이하 본인 (주민등록등본, 가족관계증명서, 학생증 중 택 1)",
+                "법령에 따른 각종 유공자 본인 (국가보훈등록증)"
+            ]
+        }
+    }
+]

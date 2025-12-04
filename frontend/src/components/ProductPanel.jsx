@@ -5,12 +5,11 @@ import { getFavorites, addFavorite, updateFavorite, deleteFavorite } from '../se
 
 const GUEST_STORAGE_KEY = 'guest_favorite_products';
 
-export default function ProductPanel() {
+export default function ProductPanel({ isOpen = true, onToggle }) {
     const { isAuthenticated } = useAuthStore();
     const [products, setProducts] = useState([]);
     const [url, setUrl] = useState('');
     const [title, setTitle] = useState('');
-    const [isOpen, setIsOpen] = useState(true);
     const [editingId, setEditingId] = useState(null);
     const [editTitle, setEditTitle] = useState('');
     const [editUrl, setEditUrl] = useState('');
@@ -207,7 +206,7 @@ export default function ProductPanel() {
     if (!isOpen) {
         return (
             <button
-                onClick={() => setIsOpen(true)}
+                onClick={onToggle}
                 className="fixed top-4 right-4 z-50 p-3 bg-white rounded-lg shadow-lg hover:bg-gray-50 border border-gray-200"
                 title="관심 상품 열기"
             >
@@ -227,7 +226,7 @@ export default function ProductPanel() {
                         🛍️ 관심 상품
                     </h3>
                     <button
-                        onClick={() => setIsOpen(false)}
+                        onClick={onToggle}
                         className="p-2 hover:bg-white/50 rounded-lg transition"
                         title="닫기"
                     >

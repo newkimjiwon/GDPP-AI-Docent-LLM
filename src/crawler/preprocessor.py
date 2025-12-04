@@ -86,19 +86,28 @@ class DataPreprocessor:
     
     def chunk_brand_data(self, brand: Dict) -> Dict:
         """브랜드 데이터를 청크로 변환"""
-        # 브랜드 정보를 하나의 텍스트로 결합
+        # 검색용 텍스트 (간결하게 유지)
         text_parts = [
             f"브랜드명: {brand['brand_name']}",
             f"카테고리: {brand['category']}",
             f"설명: {brand['description']}"
         ]
         
-        if brand.get('products'):
-            products_str = ', '.join(brand['products'])
-            text_parts.append(f"주요 제품: {products_str}")
+        # 부스 번호 추가
+        if brand.get('booth_number'):
+            text_parts.append(f"부스 번호: {brand['booth_number']}")
         
-        if brand.get('booth_location'):
-            text_parts.append(f"부스 위치: {brand['booth_location']}")
+        # 홈페이지 추가
+        if brand.get('homepage'):
+            text_parts.append(f"홈페이지: {brand['homepage']}")
+        
+        # 인스타그램 추가
+        if brand.get('instagram'):
+            text_parts.append(f"인스타그램: {brand['instagram']}")
+        
+        # 태그 추가 (검색 향상)
+        if brand.get('tags'):
+            text_parts.append(f"태그: {brand['tags']}")
         
         text = '\n'.join(text_parts)
         
@@ -106,10 +115,18 @@ class DataPreprocessor:
             "text": text,
             "metadata": {
                 "source": "gdpp_brand",
-                "brand_name": brand['brand_name'],
-                "category": brand['category'],
-                "booth_location": brand.get('booth_location', ''),
-                "url": brand.get('source_url', '')
+                # 원본 브랜드 데이터 전체를 메타데이터에 저장 (None 방지)
+                "brand_name": brand.get('brand_name') or '',
+                "booth_number": brand.get('booth_number') or '',
+                "category": brand.get('category') or '',
+                "master_category": brand.get('master_category') or '',
+                "description": brand.get('description') or '',
+                "homepage": brand.get('homepage') or '',
+                "instagram": brand.get('instagram') or '',
+                "tags": brand.get('tags') or '',
+                "all_categories": brand.get('all_categories') or '',
+                "url": brand.get('source_url') or '',
+                # 이미지는 제외 (용량 절약)
             }
         }
     
@@ -139,6 +156,102 @@ class DataPreprocessor:
         
         print(f"  [OK] {len(brands)}개 브랜드 -> {len(chunks)}개 청크")
         return chunks
+    
+    def chunk_faq_data(self, faq: Dict) -> Dict:
+        """FAQ 데이터를 청크로 변환"""
+        text = f"질문: {faq['question']}\n답변: {faq['answer']}"
+        
+        return {
+            "text": text,
+            "metadata": {
+                "source": "gdpp_faq",
+                "category": faq.get('category', 'general'),
+                "url": faq.get('source_url', '')
+            }
+        }
+    
+    def chunk_event_info(self, event_info: Dict) -> List[Dict]:
+        """이벤트 정보를 청크로 변환"""
+        chunks = []
+        
+        # 사무국 정보
+        contact = event_info.get('contact', {})
+        contact_text = f"""궁디팡팡 캣페스타 운영 사무국
+운영 시간: {contact.get('office_hours', '')}
+이메일: {contact.get('email', '')}
+전화: {contact.get('phone', '')}
+문의하기: {contact.get('inquiry_page', '')}
+공식 홈페이지: {event_info.get('website', {}).get('main', '')}"""
+        
+        chunks.append({
+            "text": contact_text,
+            "metadata": {
+                "source": "gdpp_event_info",
+                "category": "contact",
+                "url": event_info.get('website', {}).get('main', '')
+            }
+        })
+        
+        # 2025년 일정
+        if 'schedule_2025' in event_info:
+            schedule_text = "2025년 궁디팡팡 캣페스타 일정:\n"
+            for event in event_info['schedule_2025']:
+                schedule_text += f"제{event['event_number']}회: {event['dates']} / {event['location']}\n"
+            
+            chunks.append({
+                "text": schedule_text,
+                "metadata": {
+                    "source": "gdpp_event_info",
+                    "category": "schedule",
+                    "url": event_info.get('website', {}).get('main', '')
+                }
+            })
+        
+        # 중요 규칙
+        if 'important_rules' in event_info:
+            rules = event_info['important_rules']
+            rules_text = f"""궁디팡팡 캣페스타 중요 규칙:
+반려동물 동반: {rules.get('pet_entry', '')}
+재입장: {rules.get('re_entry', '')}
+무료입장 대상: {', '.join(rules.get('free_entry_eligibility', []))}"""
+            
+            chunks.append({
+                "text": rules_text,
+                "metadata": {
+                    "source": "gdpp_event_info",
+                    "category": "rules",
+                    "url": event_info.get('website', {}).get('main', '')
+                }
+            })
+        
+        return chunks
+    
+    def process_faq_data(self, input_file: str) -> List[Dict]:
+        """FAQ 데이터 전처리"""
+        print(f"[INFO] FAQ 데이터 처리 중: {input_file}")
+        
+        with open(input_file, 'r', encoding='utf-8') as f:
+            faqs = json.load(f)
+        
+        chunks = [self.chunk_faq_data(faq) for faq in faqs]
+        
+        print(f"  [OK] {len(faqs)}개 FAQ -> {len(chunks)}개 청크")
+        return chunks
+    
+    def process_event_info(self, input_file: str) -> List[Dict]:
+        """이벤트 정보 전처리"""
+        print(f"[INFO] 이벤트 정보 처리 중: {input_file}")
+        
+        with open(input_file, 'r', encoding='utf-8') as f:
+            event_data = json.load(f)
+        
+        all_chunks = []
+        for event_info in event_data:
+            chunks = self.chunk_event_info(event_info)
+            all_chunks.extend(chunks)
+        
+        print(f"  [OK] {len(event_data)}개 이벤트 -> {len(all_chunks)}개 청크")
+        return all_chunks
     
     def save_chunks(self, chunks: List[Dict], output_file: str):
         """청크 데이터 저장"""
@@ -177,8 +290,14 @@ if __name__ == "__main__":
     # 브랜드 데이터 처리
     brand_chunks = preprocessor.process_brand_data("data/raw/gdpp_brands.json")
     
+    # FAQ 데이터 처리
+    faq_chunks = preprocessor.process_faq_data("data/raw/gdpp_faq.json")
+    
+    # 이벤트 정보 처리
+    event_chunks = preprocessor.process_event_info("data/raw/gdpp_event_info.json")
+    
     # 통합
-    all_chunks = wiki_chunks + brand_chunks
+    all_chunks = wiki_chunks + brand_chunks + faq_chunks + event_chunks
     
     # 저장
     preprocessor.save_chunks(all_chunks, "data/processed/all_chunks.json")

@@ -1,158 +1,167 @@
 # File: src/crawler/gdpp_crawler.py
 """
-GDPP    - Selenium 
+GDPP 브랜드 크롤러 - JavaScript에서 데이터 추출
 """
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
+import requests
 from bs4 import BeautifulSoup
 import json
+import re
 import time
 from typing import List, Dict
 from pathlib import Path
 
 
 class GDPPBrandCrawler:
-    """   """
+    """GDPP 브랜드 크롤러"""
     
-    def __init__(self, headless: bool = True):
+    def __init__(self):
         """
-        Args:
-            headless:    
+        크롤러 초기화
         """
-        self.headless = headless
-        self.driver = None
-        
-    def setup_driver(self):
-        """Selenium WebDriver """
-        chrome_options = Options()
-        
-        if self.headless:
-            chrome_options.add_argument('--headless')
-        
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument('--window-size=1920,1080')
-        chrome_options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
-        
-        service = Service(ChromeDriverManager().install())
-        self.driver = webdriver.Chrome(service=service, options=chrome_options)
-        
-    def close_driver(self):
-        """WebDriver """
-        if self.driver:
-            self.driver.quit()
+        self.headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
             
     def crawl_brands(self, url: str = "https://gdppcat.com/brand") -> List[Dict]:
-        """  """
+        """브랜드 정보 크롤링"""
         
-        print(f"    : {url}")
+        print(f"[INFO] 크롤링 시작: {url}")
         
         try:
-            self.setup_driver()
-            self.driver.get(url)
+            # HTTP 요청
+            response = requests.get(url, headers=self.headers)
+            response.raise_for_status()
             
-            # 페이지 로딩 대기
-            print("[INFO] 페이지 로딩 대기 중...")
-            time.sleep(3)
+            # HTML 파싱
+            soup = BeautifulSoup(response.content, 'html.parser')
             
-            #    
-            print("   ...")
-            self.scroll_page()
-            
-            #   
-            page_source = self.driver.page_source
-            soup = BeautifulSoup(page_source, 'html.parser')
-            
-            #    ( HTML    )
+            # 브랜드 데이터 추출
             brands = self.extract_brands(soup)
             
-            print(f" {len(brands)}    ")
+            print(f"[SUCCESS] {len(brands)}개의 브랜드 데이터 수집 완료")
             
             return brands
             
         except Exception as e:
-            print(f"    : {e}")
+            print(f"[ERROR] 크롤링 실패: {e}")
             return []
-            
-        finally:
-            self.close_driver()
     
-    def scroll_page(self):
-        """    """
-        last_height = self.driver.execute_script("return document.body.scrollHeight")
-        
-        while True:
-            #   
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(2)
-            
-            #   
-            new_height = self.driver.execute_script("return document.body.scrollHeight")
-            
-            if new_height == last_height:
-                break
-                
-            last_height = new_height
+
     
     def extract_brands(self, soup: BeautifulSoup) -> List[Dict]:
-        """HTML   """
+        """JavaScript에서 브랜드 데이터 추출"""
         brands = []
         
-        #  HTML     
-        # :      div   
+        # script 태그에서 brand_list 찾기
+        scripts = soup.find_all('script')
         
-        #  1:   
-        brand_elements = soup.find_all('div', class_=lambda x: x and 'brand' in x.lower())
+        for script in scripts:
+            if script.string and 'brand_list:' in script.string:
+                try:
+                    # brand_list: 위치 찾기
+                    start_idx = script.string.find('brand_list:')
+                    if start_idx == -1:
+                        continue
+                    
+                    # 배열 시작 위치 찾기
+                    array_start = script.string.find('[', start_idx)
+                    if array_start == -1:
+                        continue
+                    
+                    # 괄호 카운팅으로 배열 끝 찾기
+                    bracket_count = 0
+                    in_string = False
+                    escape_next = False
+                    array_end = -1
+                    
+                    for j, char in enumerate(script.string[array_start:], start=array_start):
+                        if escape_next:
+                            escape_next = False
+                            continue
+                        
+                        if char == '\\\\':
+                            escape_next = True
+                            continue
+                        
+                        if char == '"' and not escape_next:
+                            in_string = not in_string
+                        
+                        if not in_string:
+                            if char == '[':
+                                bracket_count += 1
+                            elif char == ']':
+                                bracket_count -= 1
+                                if bracket_count == 0:
+                                    array_end = j + 1
+                                    break
+                    
+                    if array_end == -1:
+                        print("[ERROR] 배열 끝을 찾을 수 없습니다.")
+                        continue
+                    
+                    # JSON 파싱
+                    json_str = script.string[array_start:array_end]
+                    brand_data = json.loads(json_str)
+                    
+                    print(f"[INFO] JavaScript에서 {len(brand_data)}개의 브랜드 데이터 발견")
+                    
+                    # 각 브랜드 데이터 파싱
+                    for brand_obj in brand_data:
+                        brand_info = self.parse_brand_element(brand_obj)
+                        if brand_info:
+                            brands.append(brand_info)
+                    
+                    break  # 데이터를 찾았으면 종료
+                    
+                except json.JSONDecodeError as e:
+                    print(f"[ERROR] JSON 파싱 실패: {e}")
+                    continue
+                except Exception as e:
+                    print(f"[ERROR] 데이터 추출 실패: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    continue
         
-        if not brand_elements:
-            #  2:      
-            brand_elements = soup.find_all('a', href=lambda x: x and '/brand/' in str(x))
-        
-        print(f" {len(brand_elements)}   ")
-        
-        for element in brand_elements:
-            try:
-                brand_info = self.parse_brand_element(element)
-                if brand_info:
-                    brands.append(brand_info)
-            except Exception as e:
-                print(f"    : {e}")
-                continue
+        if not brands:
+            print("[WARNING] 브랜드 데이터를 찾지 못했습니다.")
         
         return brands
     
-    def parse_brand_element(self, element) -> Dict:
-        """    """
+    def parse_brand_element(self, brand_obj: Dict) -> Dict:
+        """JSON 객체에서 브랜드 정보 추출"""
         
-        # 
-        brand_name = element.get_text(strip=True)
-        
-        #  URL
-        img_tag = element.find('img')
-        image_url = img_tag.get('src', '') if img_tag else ''
-        
-        #  (    )
-        category = element.get('data-category', '')
-        
-        #  ( )
-        description = ''
-        desc_element = element.find('p') or element.find('div', class_='description')
-        if desc_element:
-            description = desc_element.get_text(strip=True)
-        
-        return {
-            "brand_name": brand_name,
-            "category": category,
-            "description": description,
-            "image_url": image_url,
-            "source_url": "https://gdppcat.com/brand"
-        }
+        try:
+            return {
+                # 기본 정보
+                "brand_name": brand_obj.get("PR_NAME_KR", ""),
+                "booth_number": brand_obj.get("BOOTH_NUMBER", ""),
+                "category": brand_obj.get("CATEGORY_DESC", ""),
+                "master_category": brand_obj.get("MASTER_CATEGORY_DESC", ""),
+                "description": brand_obj.get("COMPANY_INFO", ""),
+                
+                # 연락처 정보
+                "homepage": brand_obj.get("HOMEPAGE", ""),
+                "instagram": brand_obj.get("INSTAGRAM_ACCOUNT", ""),
+                
+                # 이미지 URL들
+                "image_url_1": brand_obj.get("IMG_URL_1", ""),
+                "image_url_2": brand_obj.get("IMG_URL_2", ""),
+                "image_url_3": brand_obj.get("IMG_URL_3", ""),
+                "image_thumb_url_1": brand_obj.get("IMG_THUMB_URL_1", ""),
+                "image_thumb_url_2": brand_obj.get("IMG_THUMB_URL_2", ""),
+                "image_thumb_url_3": brand_obj.get("IMG_THUMB_URL_3", ""),
+                
+                # 추가 정보
+                "tags": brand_obj.get("TAG", ""),
+                "all_categories": brand_obj.get("CATEGORY_DESCs", ""),
+                
+                # 메타 정보
+                "source_url": "https://gdppcat.com/brand",
+                "crawled_at": time.strftime("%Y-%m-%d %H:%M:%S")
+            }
+        except Exception as e:
+            print(f"[ERROR] 브랜드 데이터 파싱 실패: {e}")
+            return None
     
     def save_to_json(self, data: List[Dict], filepath: str):
         """ JSON  """
@@ -165,8 +174,8 @@ class GDPPBrandCrawler:
 
 
 if __name__ == "__main__":
-    #  
-    crawler = GDPPBrandCrawler(headless=False)  #    
+    # 크롤러 실행
+    crawler = GDPPBrandCrawler()    
     
     #  
     brands = crawler.crawl_brands()

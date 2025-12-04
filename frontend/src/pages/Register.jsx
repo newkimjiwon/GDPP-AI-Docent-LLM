@@ -8,6 +8,13 @@ export default function Register() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [passwordStrength, setPasswordStrength] = useState({
+        minLength: false,
+        hasUpperCase: false,
+        hasLowerCase: false,
+        hasNumber: false,
+        hasSpecialChar: false
+    });
     const { register, isLoading, error, clearError } = useAuthStore();
     const navigate = useNavigate();
 
@@ -15,6 +22,22 @@ export default function Register() {
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
+    };
+
+    // 비밀번호 강도 검사
+    const checkPasswordStrength = (password) => {
+        return {
+            minLength: password.length >= 8,
+            hasUpperCase: /[A-Z]/.test(password),
+            hasLowerCase: /[a-z]/.test(password),
+            hasNumber: /[0-9]/.test(password),
+            hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+        };
+    };
+
+    // 비밀번호 강도가 충분한지 확인
+    const isPasswordStrong = (strength) => {
+        return Object.values(strength).every(val => val === true);
     };
 
     // 필드별 유효성 검사
@@ -33,10 +56,13 @@ export default function Register() {
                 break;
 
             case 'password':
+                const strength = checkPasswordStrength(value);
+                setPasswordStrength(strength);
+
                 if (!value) {
                     newErrors.password = '비밀번호를 입력해주세요';
-                } else if (value.length < 6) {
-                    newErrors.password = '비밀번호는 최소 6자 이상이어야 합니다';
+                } else if (!isPasswordStrong(strength)) {
+                    newErrors.password = '비밀번호 조건을 모두 충족해주세요';
                 } else {
                     delete newErrors.password;
                 }
@@ -144,18 +170,38 @@ export default function Register() {
                             value={password}
                             onChange={(e) => {
                                 setPassword(e.target.value);
-                                if (errors.password) validateField('password', e.target.value);
+                                validateField('password', e.target.value);
                             }}
                             onBlur={handleBlur}
                             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition ${errors.password ? 'border-red-500' : 'border-gray-300'
                                 }`}
                             placeholder="••••••••"
                             required
-                            minLength={6}
                         />
-                        {errors.password && (
-                            <p className="mt-1 text-xs text-red-600">{errors.password}</p>
-                        )}
+
+                        {/* 비밀번호 강도 표시 */}
+                        <div className="mt-2 space-y-1">
+                            <div className={`text-xs flex items-center ${passwordStrength.minLength ? 'text-green-600' : 'text-red-600'}`}>
+                                <span className="mr-2">{passwordStrength.minLength ? '✓' : '✗'}</span>
+                                최소 8자 이상
+                            </div>
+                            <div className={`text-xs flex items-center ${passwordStrength.hasUpperCase ? 'text-green-600' : 'text-red-600'}`}>
+                                <span className="mr-2">{passwordStrength.hasUpperCase ? '✓' : '✗'}</span>
+                                대문자 포함
+                            </div>
+                            <div className={`text-xs flex items-center ${passwordStrength.hasLowerCase ? 'text-green-600' : 'text-red-600'}`}>
+                                <span className="mr-2">{passwordStrength.hasLowerCase ? '✓' : '✗'}</span>
+                                소문자 포함
+                            </div>
+                            <div className={`text-xs flex items-center ${passwordStrength.hasNumber ? 'text-green-600' : 'text-red-600'}`}>
+                                <span className="mr-2">{passwordStrength.hasNumber ? '✓' : '✗'}</span>
+                                숫자 포함
+                            </div>
+                            <div className={`text-xs flex items-center ${passwordStrength.hasSpecialChar ? 'text-green-600' : 'text-red-600'}`}>
+                                <span className="mr-2">{passwordStrength.hasSpecialChar ? '✓' : '✗'}</span>
+                                특수문자 포함 (!@#$%^&* 등)
+                            </div>
+                        </div>
                     </div>
 
                     <div>
