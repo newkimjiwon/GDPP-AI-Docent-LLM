@@ -1,4 +1,4 @@
-# GDPP AI Docent - 실행 가이드
+# GDPP AI Docent - 실행 가이드(Ubuntu 22.04.5 LTS)
 
 ## 시스템 요구사항
 - Python 3.10
