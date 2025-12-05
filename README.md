@@ -364,17 +364,112 @@ python -m uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 **터미널 2: React 프론트엔드**
+
+#### 2.1 NVM (Node Version Manager) 설치 (최초 1회)
+
+NVM이 설치되어 있지 않다면 먼저 설치합니다:
+
 ```bash
-# Node.js 20 환경 설정 (nvm 사용)
+# NVM 설치 스크립트 다운로드 및 실행
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# 셸 설정 파일에 NVM 환경 변수 추가
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# 설정 적용
+source ~/.bashrc  # bash 사용 시
+# 또는
+source ~/.zshrc   # zsh 사용 시
+
+# NVM 설치 확인
+nvm --version
+```
+
+#### 2.2 Node.js 20 설치 및 활성화
+
+```bash
+# Node.js 20 LTS 버전 설치 (최초 1회)
+nvm install 20
+
+# Node.js 20 사용 설정
+nvm use 20
+
+# 기본 버전으로 설정 (선택사항)
+nvm alias default 20
+
+# 설치 확인
+node --version  # v20.19.6 출력 확인
+npm --version   # 10.8.2 출력 확인
+```
+
+#### 2.3 프론트엔드 의존성 설치 및 실행
+
+```bash
+# NVM 환경 로드 (새 터미널 세션마다 필요)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm use 20
 
-# React 앱 실행
+# React 앱 디렉토리로 이동
 cd /path/to/GDDPAIDocent/frontend
-npm install  # 의존성 설치 (최초 1회)
+
+# 의존성 설치 (최초 1회 또는 package.json 변경 시)
+npm install
+
+# 개발 서버 실행
 npm run dev
 ```
+
+**설치되는 주요 패키지:**
+- `react` (19.0.0): UI 라이브러리
+- `vite` (6.0.11): 빌드 도구 및 개발 서버
+- `tailwindcss` (3.4.17): CSS 프레임워크
+- `zustand` (5.0.2): 상태 관리
+- `axios`: HTTP 클라이언트
+- `react-router-dom`: 라우팅
+
+**정상 실행 시 출력:**
+```
+  VITE v6.0.11  ready in 500 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+```
+
+#### 2.4 프론트엔드 문제 해결
+
+**문제: `vite: not found` 오류**
+```bash
+# 원인: node_modules가 설치되지 않았거나 손상됨
+# 해결:
+rm -rf node_modules package-lock.json
+npm install
+npm run dev
+```
+
+**문제: 포트 5173이 이미 사용 중**
+```bash
+# 해결: 다른 포트로 실행
+npm run dev -- --port 5174
+```
+
+**문제: NVM 명령어를 찾을 수 없음**
+```bash
+# 원인: NVM 환경 변수가 로드되지 않음
+# 해결: 매번 새 터미널에서 다음 명령 실행
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm use 20
+```
+
+**문제: API 연결 실패 (Network Error)**
+- 백엔드 서버가 실행 중인지 확인: http://localhost:8000/docs
+- 브라우저 콘솔(F12)에서 네트워크 탭 확인
+- CORS 오류인 경우 백엔드 CORS 설정 확인
+
 
 ### 5. 접속
 
@@ -491,9 +586,12 @@ GDDPAIDocent/
 
 | 데이터 소스 | 항목 수 | 총 크기 | 설명 |
 | :--- | :--- | :--- | :--- |
-| Wikipedia | 12 페이지 | 27,081자 | 고양이 관련 지식 |
-| GDPP 브랜드 | **243 브랜드** | - | 캣페스타 참가 브랜드 |
+| Wikipedia | 12 페이지 | 36,911자 | 고양이 관련 지식 (품종, 행동, 건강, 영양 등) |
+| GDPP 브랜드 | 243개 | 297,010자 | 캣페스타 참가 브랜드 정보 |
+| GDPP 이벤트 | 1개 | 1,139자 | 2025년 일정, 장소, 운영시간, 연락처 |
+| GDPP FAQ | 39개 | 14,653자 | 자주 묻는 질문 및 답변 |
 | **총 청크** | **297개** | **100,907자** | **전처리 완료** |
+
 
 ### 브랜드 카테고리 분포
 
@@ -593,6 +691,3 @@ GDDPAIDocent/
 - **제출**: (주)메쎄이상 웹 & AI 개발 부문 채용 과제
 - **GitHub**: [https://github.com/newkimjiwon/GDPP-AI-Docent-LLM](https://github.com/newkimjiwon/GDPP-AI-Docent-LLM)
 - **이메일**: newkimjiwon@gmail.com
-
-
-**Made with ❤️ for 궁디팡팡 캣페스타**
