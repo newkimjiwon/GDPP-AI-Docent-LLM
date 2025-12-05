@@ -4,8 +4,8 @@
 로컬 LLM + Hybrid Retrieval로 구현한 캣페스타 전시 안내 서비스
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.122.0-green.svg)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://react.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-green.svg)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-19.2.0-blue.svg)](https://react.dev/)
 [![Ollama](https://img.shields.io/badge/Ollama-0.13.0-orange.svg)](https://ollama.com/)
 [![EXAONE](https://img.shields.io/badge/EXAONE-3.0--7.8B-purple.svg)](https://huggingface.co/LGAI-EXAONE)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://docs.docker.com/compose/)
@@ -40,7 +40,7 @@
 ### 전시회 특화 도슨트 모드
 
 **1. 브랜드 정보 제공**
-- 52개 캣페스타 참가 브랜드 정보 검색
+- 243개 캣페스타 참가 브랜드 정보 검색
 - 브랜드별 카테고리, 제품, 부스 위치 안내
 - 홈페이지/SNS 링크 제공
 - 사용자 질문에 맞는 브랜드 추천
@@ -144,7 +144,7 @@
 ## 기술 스택
 
 ### Frontend
-- **React 18**: 사용자 인터페이스 라이브러리
+- **React 19**: 사용자 인터페이스 라이브러리
 - **Vite 5**: 빌드 도구 및 개발 서버
 - **Tailwind CSS 3**: 유틸리티 기반 CSS 프레임워크
 - **Zustand**: 경량 상태 관리 라이브러리

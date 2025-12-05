@@ -63,7 +63,10 @@ def initialize_components():
         print(f"[INFO] Ollama URL: {ollama_base_url}")
         ollama_client = OllamaClient(
             base_url=ollama_base_url,
-            model="anpigon/exaone-3.0-7.8b-instruct-llamafied"  # EXAONE 3.0 for Korean
+            # model="llama3.1:8b"
+            # model="llama3.2:3b"
+            # model="anpigon/exaone-3.0-7.8b-instruct-llamafied"
+            model="anpigon/exaone-3.0-7.8b-instruct-llamafied"
         )
 
 
