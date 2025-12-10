@@ -5,7 +5,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-green.svg)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-19.2.0-blue.svg)](https://react.dev/)
+[![React](https://img.shields.io/badge/React-19.2.1-blue.svg)](https://react.dev/)
 [![Ollama](https://img.shields.io/badge/Ollama-0.13.0-orange.svg)](https://ollama.com/)
 [![EXAONE](https://img.shields.io/badge/EXAONE-3.0--7.8B-purple.svg)](https://huggingface.co/LGAI-EXAONE)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://docs.docker.com/compose/)
@@ -145,7 +145,7 @@
 
 ### Frontend
 - **React 19**: 사용자 인터페이스 라이브러리
-- **Vite 5**: 빌드 도구 및 개발 서버
+- **Vite 7**: 빌드 도구 및 개발 서버
 - **Tailwind CSS 3**: 유틸리티 기반 CSS 프레임워크
 - **Zustand**: 경량 상태 관리 라이브러리
 - **Axios**: HTTP 클라이언트
@@ -423,16 +423,16 @@ npm run dev
 ```
 
 **설치되는 주요 패키지:**
-- `react` (19.0.0): UI 라이브러리
-- `vite` (6.0.11): 빌드 도구 및 개발 서버
-- `tailwindcss` (3.4.17): CSS 프레임워크
-- `zustand` (5.0.2): 상태 관리
+- `react` (19.2.1): UI 라이브러리
+- `vite` (7.2.7): 빌드 도구 및 개발 서버
+- `tailwindcss` (3.4.18): CSS 프레임워크
+- `zustand` (5.0.8): 상태 관리
 - `axios`: HTTP 클라이언트
 - `react-router-dom`: 라우팅
 
 **정상 실행 시 출력:**
 ```
-  VITE v6.0.11  ready in 500 ms
+  VITE v7.2.7  ready in 500 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose

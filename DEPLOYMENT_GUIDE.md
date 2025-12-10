@@ -202,10 +202,10 @@ npm install
 ```
 
 **설치되는 주요 패키지:**
-- `react` (19.0.0): UI 라이브러리
-- `vite` (6.0.11): 빌드 도구 및 개발 서버
-- `tailwindcss` (3.4.17): CSS 프레임워크
-- `zustand` (5.0.2): 상태 관리
+- `react` (19.2.1): UI 라이브러리
+- `vite` (7.2.7): 빌드 도구 및 개발 서버
+- `tailwindcss` (3.4.18): CSS 프레임워크
+- `zustand` (5.0.8): 상태 관리
 - `axios`: HTTP 클라이언트
 - `react-router-dom`: 라우팅
 
@@ -223,7 +223,7 @@ npm run dev
 
 **개발 서버 실행 결과:**
 ```
-  VITE v6.0.11  ready in 500 ms
+  VITE v7.2.7  ready in 500 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
